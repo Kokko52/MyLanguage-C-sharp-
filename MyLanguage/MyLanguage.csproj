@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="kvdouble.cs" />
     <Compile Include="kvint.cs" />
     <Compile Include="kvprint.cs" />
     <Compile Include="kvstring.cs" />

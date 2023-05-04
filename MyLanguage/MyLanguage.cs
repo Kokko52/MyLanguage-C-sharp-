@@ -14,27 +14,16 @@ namespace MyLanguage
         #region textBoxs
         //textBox1 - code
         public TextBox code = new TextBox();
-        //textBox1 - code
+        //textBox2 - otp
         public TextBox otp = new TextBox();
         #endregion
         #region Storages Variables
         //list int
         public Dictionary<string, int> list_int = new Dictionary<string, int>();
-
         //list string
         public Dictionary<string, string> list_string = new Dictionary<string, string>();
-
-        //list float
-        //  public Dictionary<string, float> val_float = new Dictionary<string, float>();
-
         //list double
         public Dictionary<string, double> list_double = new Dictionary<string, double>();
-
-        //list char
-        //public Dictionary<string, char> val_char = new Dictionary<string, char>();
-
-        //list bool
-        // public Dictionary<string, bool> val_bool = new Dictionary<string, bool>();
         #endregion
 
         //original string
@@ -83,32 +72,30 @@ namespace MyLanguage
             //lens code
             int lens_code = 0;
 
+            #region main func - 'KV'
+            //main func 'KV{'
+            if (element[0] != "KV{")
+            {
+                otp.Text = $"Syntax error: main function not found - {element[0]}";
+                return;
+            }
+            //end main func - KV
+            if (element[element.Length - 1] != "}")
+            {
+                otp.Text = "Syntax error: end main function not found";
+                return;
+            }
+            #endregion
+
             while (lens_code < element.Length - 1)
             {
-                #region main func - 'KV'
-                //main func 'KV{'
-                if (element[0] != "KV{")
-                {
-                    otp.Text = $"Syntax error: main function not found - {element[0]}";
-                    return;
-                }
-                //end main func - KV
-                if (element[element.Length - 1] != "}")
-                {
-                    otp.Text = "Syntax error: end main function not found";
-                    return;
-                }
-                #endregion
-
-                #region kv.print
-                //if there is a keyword - kv.print
+                //kv.print
                 if (element[lens_code].Split(' ')[0] == "kv.print")
                 {
                     kvprint kvprint = new kvprint();
                     kvprint.str = element[lens_code].Trim();
                     if (!kvprint.run(list_int, list_string, list_double, otp)) { break; }
                 }
-                #endregion
 
                 //kvint
                 if (element[lens_code].Split(' ')[0] == "kvint")
@@ -124,16 +111,24 @@ namespace MyLanguage
                     kvstring.str = element[lens_code].Trim();
                     if (!kvstring.run(list_int, list_string, list_double, otp)) { break; }
                 }
+                if (element[lens_code].Split(' ')[0] == "kvdouble")
+                {
+                    kvdouble kvdouble = new kvdouble();
+                    kvdouble.str = element[lens_code].Trim();
+                    if (!kvdouble.run(list_int, list_string, list_double, otp)) { break; };
+                }
                 ++lens_code;
             }
         }
 
         private void runToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //clear
             otp.Text = "";
             list_int.Clear();
             list_string.Clear();
             list_double.Clear();
+            //
             Run();
         }
     }
