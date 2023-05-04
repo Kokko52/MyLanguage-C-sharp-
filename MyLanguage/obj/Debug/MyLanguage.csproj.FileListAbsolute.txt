@@ -1,0 +1,10 @@
+D:\Kokurin\MyLanguage\bin\Debug\MyLanguage.exe.config
+D:\Kokurin\MyLanguage\bin\Debug\MyLanguage.exe
+D:\Kokurin\MyLanguage\bin\Debug\MyLanguage.pdb
+D:\Kokurin\MyLanguage\obj\Debug\MyLanguage.csproj.AssemblyReference.cache
+D:\Kokurin\MyLanguage\obj\Debug\MyLanguage.Properties.Resources.resources
+D:\Kokurin\MyLanguage\obj\Debug\MyLanguage.csproj.GenerateResource.cache
+D:\Kokurin\MyLanguage\obj\Debug\MyLanguage.csproj.CoreCompileInputs.cache
+D:\Kokurin\MyLanguage\obj\Debug\MyLanguage.exe
+D:\Kokurin\MyLanguage\obj\Debug\MyLanguage.pdb
+D:\Kokurin\MyLanguage\obj\Debug\MyLanguage.MyLanguage.resources
