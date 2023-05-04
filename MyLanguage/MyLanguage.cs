@@ -61,8 +61,6 @@ namespace MyLanguage
                 }
                 ++lens_code;
             }
-
-
         }
 
         private void runToolStripMenuItem_Click(object sender, EventArgs e)
