@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
+using System.Xml.Linq;
+using System.Windows.Forms;
 
 namespace MyLanguage
 {
@@ -11,17 +14,29 @@ namespace MyLanguage
         //kv.print string
         public string str;
         //elements string kv.print
-        public string element;
-        public string output()
+        public string name;
+        public bool run(Dictionary<string, int> list_int, Dictionary<string, string> list_string, Dictionary<string, double> list_double, TextBox otp)
         {
             //geting the value
-            element = str.Split('(')[1].Split(')')[0].Replace("\"", "");
+            name = str.Split('(')[1].Split(')')[0].Replace("\"", "");
 
-            for (int i = 0; i < 4; ++i)
+            if(list_int.ContainsKey(name))
             {
-
+                otp.Text += Convert.ToString(list_int[name]);
             }
-            return element;
+            else if(list_string.ContainsKey(name))
+            {
+                otp.Text += list_string[name];
+            }
+            else if(list_double.ContainsKey(name))
+            {
+                otp.Text += Convert.ToString(list_double[name]);
+            }
+            else
+            {
+                otp.Text = name;
+            }
+            return true;
         }
 
     }

@@ -104,29 +104,9 @@ namespace MyLanguage
                 //if there is a keyword - kv.print
                 if (element[lens_code].Split(' ')[0] == "kv.print")
                 {
-                    //value
-                    string elements;
-
-                    //geting the value
-                    elements = element[lens_code].Split('(')[1].Split(')')[0].Replace("\"", "");
-
-                    //if the variable exists
-                    if (list_int.ContainsKey(elements))
-                    {
-                        otp.Text += Convert.ToString(list_int[elements]);
-                        otp.Text += "\n\r\t";
-                    }
-                    else if (list_string.ContainsKey(elements))
-                    {
-                        otp.Text += Convert.ToString(list_string[elements]);
-                        otp.Text += "\n\r\t";
-                    }
-                    //else print text
-                    else
-                    {
-                        otp.Text += elements;
-                        otp.Text += "\n\r";
-                    }
+                    kvprint kvprint = new kvprint();
+                    kvprint.str = element[lens_code].Trim();
+                    if (!kvprint.run(list_int, list_string, list_double, otp)) { break; }
                 }
                 #endregion
 
@@ -153,6 +133,7 @@ namespace MyLanguage
             otp.Text = "";
             list_int.Clear();
             list_string.Clear();
+            list_double.Clear();
             Run();
         }
     }
