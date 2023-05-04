@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyLanguage
 {
-    class kvint
+    class kvprint
     {
         //kvint string
         public string str;
@@ -14,9 +14,9 @@ namespace MyLanguage
         public string element;
         public string output()
         {
+            //geting the value
             element = str.Split('(')[1].Split(')')[0].Replace("\"", "");
-            return element;
-            
+            return element;         
         }
 
     }
