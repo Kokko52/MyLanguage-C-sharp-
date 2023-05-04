@@ -29,8 +29,6 @@ namespace MyLanguage
         /// </summary>
         private void InitializeComponent()
         {
-            this.myCode = new System.Windows.Forms.TextBox();
-            this.output = new System.Windows.Forms.TextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -39,27 +37,6 @@ namespace MyLanguage
             this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // myCode
-            // 
-            this.myCode.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.myCode.Location = new System.Drawing.Point(12, 42);
-            this.myCode.Multiline = true;
-            this.myCode.Name = "myCode";
-            this.myCode.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.myCode.Size = new System.Drawing.Size(845, 383);
-            this.myCode.TabIndex = 0;
-            this.myCode.Text = "KV{\r\n\r\n}\r\n";
-            // 
-            // output
-            // 
-            this.output.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.output.Location = new System.Drawing.Point(12, 487);
-            this.output.Multiline = true;
-            this.output.Name = "output";
-            this.output.ReadOnly = true;
-            this.output.Size = new System.Drawing.Size(845, 118);
-            this.output.TabIndex = 1;
             // 
             // menuStrip1
             // 
@@ -113,8 +90,6 @@ namespace MyLanguage
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(869, 617);
-            this.Controls.Add(this.output);
-            this.Controls.Add(this.myCode);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MyLanguage";
@@ -127,9 +102,6 @@ namespace MyLanguage
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox myCode;
-        private System.Windows.Forms.TextBox output;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem optionToolStripMenuItem;

@@ -8,3 +8,14 @@ D:\Kokurin\MyLanguage\obj\Debug\MyLanguage.csproj.CoreCompileInputs.cache
 D:\Kokurin\MyLanguage\obj\Debug\MyLanguage.exe
 D:\Kokurin\MyLanguage\obj\Debug\MyLanguage.pdb
 D:\Kokurin\MyLanguage\obj\Debug\MyLanguage.MyLanguage.resources
+D:\Учеба\3_курс\Практика\4-5 неделя\MyLanguage\obj\Debug\MyLanguage.csproj.AssemblyReference.cache
+D:\Учеба\3_курс\Практика\4-5 неделя\MyLanguage\obj\Debug\MyLanguage.csproj.SuggestedBindingRedirects.cache
+D:\Учеба\3_курс\Практика\4-5 неделя\MyLanguage\obj\Debug\MyLanguage.MyLanguage.resources
+D:\Учеба\3_курс\Практика\4-5 неделя\MyLanguage\obj\Debug\MyLanguage.Properties.Resources.resources
+D:\Учеба\3_курс\Практика\4-5 неделя\MyLanguage\obj\Debug\MyLanguage.csproj.GenerateResource.cache
+D:\Учеба\3_курс\Практика\4-5 неделя\MyLanguage\obj\Debug\MyLanguage.csproj.CoreCompileInputs.cache
+D:\Учеба\3_курс\Практика\4-5 неделя\MyLanguage\obj\Debug\MyLanguage.exe
+D:\Учеба\3_курс\Практика\4-5 неделя\MyLanguage\obj\Debug\MyLanguage.pdb
+D:\Учеба\3_курс\Практика\4-5 неделя\MyLanguage\bin\Debug\MyLanguage.exe.config
+D:\Учеба\3_курс\Практика\4-5 неделя\MyLanguage\bin\Debug\MyLanguage.exe
+D:\Учеба\3_курс\Практика\4-5 неделя\MyLanguage\bin\Debug\MyLanguage.pdb
