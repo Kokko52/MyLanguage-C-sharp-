@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="kvint.cs" />
     <Compile Include="kvprint.cs" />
     <Compile Include="MyLanguage.cs">
       <SubType>Form</SubType>

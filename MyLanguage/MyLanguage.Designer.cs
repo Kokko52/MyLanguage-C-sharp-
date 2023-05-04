@@ -49,6 +49,7 @@ namespace MyLanguage
             this.myCode.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.myCode.Size = new System.Drawing.Size(845, 383);
             this.myCode.TabIndex = 0;
+            this.myCode.Text = "KV{\r\n\r\n}\r\n";
             // 
             // output
             // 

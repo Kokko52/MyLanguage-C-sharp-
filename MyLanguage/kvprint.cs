@@ -8,14 +8,19 @@ namespace MyLanguage
 {
     class kvprint
     {
-        //kvint string
+        //kv.print string
         public string str;
-        //elements string kvint
+        //elements string kv.print
         public string element;
         public string output()
         {
             //geting the value
             element = str.Split('(')[1].Split(')')[0].Replace("\"", "");
+            
+            for(int i = 0; i < 4; ++i)
+            {
+
+            }
             return element;         
         }
 
