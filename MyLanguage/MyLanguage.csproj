@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="kvint.cs" />
     <Compile Include="kvprint.cs" />
+    <Compile Include="kvstring.cs" />
     <Compile Include="MyLanguage.cs">
       <SubType>Form</SubType>
     </Compile>

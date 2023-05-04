@@ -15,13 +15,12 @@ namespace MyLanguage
         public string element, volume, string_int;
         public string adding_int()
         {
-            try
-            {
+           // try
+           // {
                 element = str.Split(' ')[1].Split(' ')[0];
                 volume = str.Split('=')[1].Trim();
                 string_int = element + " " + volume;
-            }
-            catch (System.FormatException) { return $"incorrect value input - {str}";}
+           // }  
             return string_int;        
         }
 
