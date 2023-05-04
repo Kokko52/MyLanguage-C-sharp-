@@ -18,7 +18,7 @@ namespace MyLanguage
         //volume string kvint
         public int volume;
 
-        public bool run(Dictionary<string, int> Int, Dictionary<string, string> Str, Dictionary<string, double> Doubl, TextBox otp)
+        public bool run(Dictionary<string, int> list_int, Dictionary<string, string> list_string, Dictionary<string, double> list_double, TextBox otp)
         {
             //seting name and volume
             name = str.Split(' ')[1].Split(' ')[0];
@@ -26,7 +26,7 @@ namespace MyLanguage
             //
 
             //if variable exists
-            if (Int.ContainsKey(name) || Str.ContainsKey(name) || Doubl.ContainsKey(name))
+            if (list_int.ContainsKey(name) || list_string.ContainsKey(name) || list_double.ContainsKey(name))
             {
                 otp.Text = $"Variable \'{name}\' with the volume \'{volume}\' already exists";
                 return false;
@@ -35,7 +35,7 @@ namespace MyLanguage
             else
             {
                 //add variable
-                Int.Add(name, volume);
+                list_int.Add(name, volume);
             }
 
             return true;

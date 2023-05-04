@@ -16,12 +16,12 @@ namespace MyLanguage
         {
             //geting the value
             element = str.Split('(')[1].Split(')')[0].Replace("\"", "");
-            
-            for(int i = 0; i < 4; ++i)
+
+            for (int i = 0; i < 4; ++i)
             {
 
             }
-            return element;         
+            return element;
         }
 
     }

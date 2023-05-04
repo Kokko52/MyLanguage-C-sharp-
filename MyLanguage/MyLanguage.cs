@@ -25,7 +25,7 @@ namespace MyLanguage
         public Dictionary<string, string> list_string = new Dictionary<string, string>();
 
         //list float
-      //  public Dictionary<string, float> val_float = new Dictionary<string, float>();
+        //  public Dictionary<string, float> val_float = new Dictionary<string, float>();
 
         //list double
         public Dictionary<string, double> list_double = new Dictionary<string, double>();
@@ -34,7 +34,7 @@ namespace MyLanguage
         //public Dictionary<string, char> val_char = new Dictionary<string, char>();
 
         //list bool
-       // public Dictionary<string, bool> val_bool = new Dictionary<string, bool>();
+        // public Dictionary<string, bool> val_bool = new Dictionary<string, bool>();
         #endregion
 
         //original string
@@ -105,86 +105,45 @@ namespace MyLanguage
                 if (element[lens_code].Split(' ')[0] == "kv.print")
                 {
                     //value
-                    string element;
+                    string elements;
 
                     //geting the value
-                    element = str.Split('(')[1].Split(')')[0].Replace("\"", "");
+                    elements = element[lens_code].Split('(')[1].Split(')')[0].Replace("\"", "");
 
                     //if the variable exists
-                    if (list_int.ContainsKey(element))
+                    if (list_int.ContainsKey(elements))
                     {
-                        otp.Text = Convert.ToString(list_int[element]);
+                        otp.Text += Convert.ToString(list_int[elements]);
+                        otp.Text += "\n\r\t";
                     }
-                    else if (list_string.ContainsKey(element))
+                    else if (list_string.ContainsKey(elements))
                     {
-                        otp.Text = Convert.ToString(list_string[element]);
+                        otp.Text += Convert.ToString(list_string[elements]);
+                        otp.Text += "\n\r\t";
                     }
                     //else print text
                     else
                     {
-                        otp.Text = element;
+                        otp.Text += elements;
+                        otp.Text += "\n\r";
                     }
                 }
                 #endregion
-           
+
                 //kvint
                 if (element[lens_code].Split(' ')[0] == "kvint")
                 {
                     kvint kvint = new kvint();
                     kvint.str = element[lens_code].Trim();
-                    if(!kvint.run(list_int, list_string, list_double, otp)) { break;}
-
-
-                    //string name;
-                    //int volume = 0;
-                    //kvint kv = new kvint();
-                    //kv.str = str.Trim();
-                    ////name variable
-                    //name = element[lens_code].Trim().Split(' ')[1].Split(' ')[0];
-                    ////volume
-                    //try
-                    //{
-                    //    //volume variable
-                    //    volume = Convert.ToInt32(element[lens_code].Trim().Split('=')[1].Trim());
-                    //}
-                    ////Incorrect Format volume
-                    //catch (FormatException) { otp.Text = $"incorrect value \'{element[lens_code].Trim().Split('=')[1].Trim()}\' for the variable - \'{name}\'"; return; }
-                    ////add
-                    //try
-                    //{
-                    //    //ading variable
-                    //    list_int.Add(name, volume);
-                    //}
-                    ////The Exists
-                    //catch (ArgumentException) { otp.Text = $"Variable \'{name}\' with the volume \'{volume}\' already exists"; return; }
+                    if (!kvint.run(list_int, list_string, list_double, otp)) { break; }
                 }
                 //kvstring
                 if (element[lens_code].Split(' ')[0] == "kvstring")
                 {
-                    string name;
-                    string volume;
-
-                    //name variable
-                    name = element[lens_code].Trim().Split(' ')[1].Split(' ')[0];
-                    //volume
-                    try
-                    {
-                        //volume variable
-                        volume = element[lens_code].Trim().Split('=')[1].Trim();
-                    }
-                    //Incorrect Format volume
-                    catch (FormatException) { otp.Text = $"incorrect value \'{element[lens_code].Trim().Split('=')[1].Trim()}\' for the variable - \'{name}\'"; return; }
-                    //add
-                    try
-                    {
-                        //ading variable
-                        list_string.Add(name, volume);
-                    }
-                    //The Exists
-                    catch (ArgumentException) { otp.Text = $"Variable \'{name}\' with the volume \'{volume}\' already exists"; return; }
+                    kvstring kvstring = new kvstring();
+                    kvstring.str = element[lens_code].Trim();
+                    if (!kvstring.run(list_int, list_string, list_double, otp)) { break; }
                 }
-
-
                 ++lens_code;
             }
         }
