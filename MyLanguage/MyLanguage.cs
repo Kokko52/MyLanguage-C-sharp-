@@ -30,6 +30,8 @@ namespace MyLanguage
         public string str;
         //lines
         public string[] element = new string[] { };
+        //lens code 
+        public int lens_code = 0;
         public MyLanguage()
         {
             InitializeComponent();
@@ -69,8 +71,7 @@ namespace MyLanguage
                 element[i] = element[i].Trim();
             }
 
-            //lens code
-            int lens_code = 0;
+            
 
             #region main func - 'KV'
             //main func 'KV{'
@@ -86,7 +87,7 @@ namespace MyLanguage
                 return;
             }
             #endregion
-
+            int lens_code = 0;
             while (lens_code < element.Length - 1)
             {
                 //kv.print
@@ -111,12 +112,23 @@ namespace MyLanguage
                     kvstring.str = element[lens_code].Trim();
                     if (!kvstring.run(list_int, list_string, list_double, otp)) { break; }
                 }
+                //kvdouble
                 if (element[lens_code].Split(' ')[0] == "kvdouble")
                 {
                     kvdouble kvdouble = new kvdouble();
                     kvdouble.str = element[lens_code].Trim();
                     if (!kvdouble.run(list_int, list_string, list_double, otp)) { break; };
                 }
+
+                //ifik
+                if ( element[lens_code].Split(' ')[0] == "ifik")
+                {
+                    ifik ifik = new ifik();
+                    ifik.lens_code = lens_code;
+                    ifik.str = element[lens_code].Trim().Replace(" ", "");
+                    if (!ifik.run(list_int, list_string, list_double, otp, element)) { break; }
+                    lens_code = ifik.lens_code;
+                }                 
                 ++lens_code;
             }
         }
@@ -128,6 +140,7 @@ namespace MyLanguage
             list_int.Clear();
             list_string.Clear();
             list_double.Clear();
+            lens_code = 0;
             //
             Run();
         }
