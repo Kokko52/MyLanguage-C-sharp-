@@ -1,6 +1,9 @@
-ifik (a > b) {
+for (kvint i = 0; i < 5; i++){
 
 }
-elsik {
 
-}
+
+name = kvint i = 0.Split(' ')[1].Split(' ')[0]
+volume = 
+
+int ch = i

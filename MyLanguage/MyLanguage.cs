@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Linq;
+using System.Net.Mail;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -25,13 +29,17 @@ namespace MyLanguage
         //list double
         public Dictionary<string, double> list_double = new Dictionary<string, double>();
         #endregion
-
         //original string
         public string str;
         //lines
         public string[] element = new string[] { };
         //lens code 
         public int lens_code = 0;
+        //check exists ifik
+        public int _if = 0;
+        //checking brackets
+        public int _sk = 0;
+        public int check_for;
         public MyLanguage()
         {
             InitializeComponent();
@@ -71,11 +79,9 @@ namespace MyLanguage
                 element[i] = element[i].Trim();
             }
 
-            
-
             #region main func - 'KV'
             //main func 'KV{'
-            if (element[0] != "KV{")
+            if (element[0] != "KV")
             {
                 otp.Text = $"Syntax error: main function not found - {element[0]}";
                 return;
@@ -87,9 +93,18 @@ namespace MyLanguage
                 return;
             }
             #endregion
-            int lens_code = 0;
-            while (lens_code < element.Length - 1)
+            int lens_code = 1;
+            while (lens_code < element.Length)
             {
+                #region checking brackets
+                //skip null line
+                if (element[lens_code] == "") { }
+                //exists brackets '{'
+                else if (element[lens_code] == "{" || element[lens_code][element[lens_code].Length - 1] == '{') { _sk++; }
+                //exists brackets '}'
+                else if (element[lens_code] == "}" || element[lens_code] == "};" || element[lens_code][element[lens_code].Length - 1] == '}') { _sk--; }
+                #endregion
+
                 //kv.print
                 if (element[lens_code].Split(' ')[0] == "kv.print")
                 {
@@ -121,16 +136,86 @@ namespace MyLanguage
                 }
 
                 //ifik
-                if ( element[lens_code].Split(' ')[0] == "ifik")
+                if (element[lens_code].Split(' ')[0] == "ifik")
                 {
                     ifik ifik = new ifik();
+                    //pass lines code
                     ifik.lens_code = lens_code;
+                    //pass line 'ifik(...)'
                     ifik.str = element[lens_code].Trim().Replace(" ", "");
                     if (!ifik.run(list_int, list_string, list_double, otp, element)) { break; }
+                    //new lines_code
                     lens_code = ifik.lens_code;
-                }                 
+                    //new if_exists
+                    _if = ifik.if_true;
+                }
+                //elsik
+                if (element[lens_code].Split(' ')[0] == "elsik")
+                {
+                    //if not find '}'
+                    if (element[lens_code - 1] != "}" && element[lens_code - 1][element[lens_code - 1].Length - 1] != '}')
+                    {
+                        //error
+                        otp.Text = "Invalid syntaxis: not exists \'ifik\'";
+                    }
+                    //if went to 'ifik' 
+                    if (_if == 1)
+                    {
+                        //skip
+                        while (!element[lens_code].Contains('}'))
+                        {
+                            ++lens_code;
+                        }
+                        _sk--;
+                    }
+                    //clear
+                    _if = 0;
+                }
+
+                //for
+                if (element[lens_code].Split(' ')[0] == "for")
+                {
+                    check_for = lens_code;
+                    @for _for = new @for();
+                    _for.str = element[lens_code].Trim();
+                    _for.lens_code = lens_code;
+
+                    _for.run(otp, element);
+                }
+                //end for
+                if (element[lens_code].Split(' ')[0] == "};")
+                {
+                    if (check_for == 0) { otp.Text = "Invalid syntax: ..."; }
+                    lens_code = check_for;
+                }
+
+                //while
+                if (element[lens_code].Split(' ')[0] == "while")
+                {
+                    @while _while = new @while();
+                    _while.str = element[lens_code].Replace(" ", "");
+                    _while.run(list_int, list_string, list_double, otp);
+                }
+
+                //variable - int
+                if (list_int.ContainsKey(element[lens_code].Split(' ')[0]))
+                {
+                    new_data_for_int cls = new new_data_for_int();
+                    cls.run(element, lens_code, list_int, element[lens_code].Split(' ')[0]);
+                }
+                else if(list_double.ContainsKey(element[lens_code].Split(' ')[0]))
+                {
+                    new_data_for_double cls = new new_data_for_double();
+                    cls.run(element, lens_code, list_double, element[lens_code].Split(' ')[0]);
+                }
                 ++lens_code;
             }
+            #region Error: checking brackets
+            if (_sk > 1) { otp.Text = "Invalid syntax: missing closing brackets"; }
+            else if (_sk > 0) { otp.Text = "Invalid syntax: missing closing bracket"; }
+            else if (_sk == -1) { otp.Text = "Invalid syntax: missing opening bracket"; }
+            else if (_sk < 0) { otp.Text = "Invalid syntax: missing opening brackets"; }
+            #endregion
         }
 
         private void runToolStripMenuItem_Click(object sender, EventArgs e)
@@ -141,6 +226,7 @@ namespace MyLanguage
             list_string.Clear();
             list_double.Clear();
             lens_code = 0;
+            _sk = 0;
             //
             Run();
         }

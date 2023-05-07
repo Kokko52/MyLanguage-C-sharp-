@@ -1,0 +1,35 @@
+string variable = element[lens_code].Split(' ')[0];
+                if (list_int.ContainsKey(variable))
+                {
+                    //clear
+                    list_int[variable] = 0;
+                    int ch = 0;
+                    string[] actions = element[lens_code].Split('=')[1].Split(' ');
+                    while (element[lens_code][ch] != ';')
+                    {
+                        if( actions.Length < 3)
+                        {
+                            break;
+                        }
+                        if (actions[ch + 1] == "+")
+                        {
+                            int var_1 = Convert.ToInt32(actions[ch]);
+                            int var_2 = Convert.ToInt32(actions[ch + 2]);
+                            actions[ch + 2] = Convert.ToString(var_1 + var_2);
+
+                            for (int i = ch; i < actions.Length - 1; i++)
+                            {
+                                actions[i] = actions[i + 1];
+                            }
+                            Array.Resize(ref actions, actions.Length - 1);
+
+                            for (int i = ch; i < actions.Length - 1; i++)
+                            {
+                                actions[i] = actions[i + 1];
+                            }
+                            Array.Resize(ref actions, actions.Length - 1);         
+
+                            list_int[variable] = var_1 + var_2;
+                        }
+                    }
+                }      

@@ -1,0 +1,33 @@
+
+KV
+{
+  for(kvint i = 0; i < 5; ++i) 
+  {
+    ifik (i ==4)
+    {
+      kv.print (i)
+    }
+  };
+
+  kv.print (true)
+
+}
+
+
+
+
+
+
+KV
+{
+  for(kvint i = 0; i < 5; ++i) 
+  {
+    ifik (i ==4)
+    {
+      kv.print (i)
+    }
+  };
+
+  kv.print (true)
+
+}

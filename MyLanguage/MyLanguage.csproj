@@ -61,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="for.cs" />
     <Compile Include="ifik.cs" />
     <Compile Include="Data types\kvdouble.cs" />
     <Compile Include="Data types\kvint.cs" />
@@ -72,8 +73,11 @@
     <Compile Include="MyLanguage.Designer.cs">
       <DependentUpon>MyLanguage.cs</DependentUpon>
     </Compile>
+    <Compile Include="new_data_for_double.cs" />
+    <Compile Include="new_data_for_int.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="while.cs" />
     <EmbeddedResource Include="MyLanguage.resx">
       <DependentUpon>MyLanguage.cs</DependentUpon>
     </EmbeddedResource>

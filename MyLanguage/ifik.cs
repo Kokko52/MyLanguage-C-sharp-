@@ -11,20 +11,26 @@ namespace MyLanguage
 {
     class ifik
     {
-        //ifik string
+        //ifik string  
         public string str;
         //elements string
         public string el_1, el_2, el_3, elements;
+        //symbols
         public static string[] symbol = new string[] { ">=", "<=", ">", "<", "==" };
+        //check errors not exists symbol
         public int ch = -1;
+
+        //lines code
         public int lens_code = 0;
-        public int LENS = 0;
+        //check exists 'ifik'
+        public int if_true = 0;
+
 
         public bool run(Dictionary<string, int> list_int, Dictionary<string, string> list_string, Dictionary<string, double> list_double, TextBox otp, string[] element)
         {
             // ifik(...)
             elements = str.Split('(')[1].Split(')')[0];
-            //split elements
+            //split elements (...)
             for (int i = 0; i < symbol.Length; i++)
             {
                 //if exixts symbol
@@ -41,7 +47,7 @@ namespace MyLanguage
                 return false;
             }
 
-            #region elements
+            #region getting names for variables
             //variable 1
             el_1 = elements.Split(' ')[0];
             //symbol
@@ -50,6 +56,7 @@ namespace MyLanguage
             el_3 = elements.Split(' ')[1];
             #endregion
 
+            #region getting values for variables
             if (list_int.ContainsKey(el_1))
             {
                 el_1 = Convert.ToString(list_int[el_1]);
@@ -77,110 +84,122 @@ namespace MyLanguage
                 el_3 = Convert.ToString(list_double[el_3]);
             }
             else { }
-            switch (el_2)
+            #endregion
+
+            try
             {
-                case ">":
-                    {
-                        //if true
-                        if (Convert.ToDouble(el_1) > Convert.ToDouble(el_3))
-                         {
-                          //  ++lens_code;
-                            return true;
-                        }
-                        //skip ifik
-                        else
+                //finding symbol
+                switch (el_2)
+                {
+                    case ">":
                         {
-                            //finding end ifik()
-                            while (!element[lens_code].Contains('}'))
+                            //if true
+                            if (Convert.ToDouble(el_1) > Convert.ToDouble(el_3))
                             {
-                                lens_code++;
+                                //wenting 'ifik' 
+                                if_true = 1;                             
+                                return true;
                             }
-                            return true;
-                        }
-                        break;  
-                    }
-                case "<":
-                    {
-                        //if true
-                        if (Convert.ToDouble(el_1) < Convert.ToDouble(el_3))
-                        {
-                           // ++lens_code;
-                            return true;
-                        }
-                        //skip ifik
-                        else
-                        {
-                            //finding end ifik()
-                            while (!element[lens_code].Contains('}'))
+                            //skip ifik
+                            else
                             {
-                                lens_code++;
+                                //finding end ifik()
+                                while (!element[lens_code].Contains('}'))
+                                {
+                                    lens_code++;
+                                }
+                                    return true;
                             }
-                            return true;
+                            break;
                         }
-                        break;
-                    }
-                case "==":
-                    {
-                        //if true
-                        if (Convert.ToDouble(el_1) == Convert.ToDouble(el_3))
+                    case "<":
                         {
-                            //++lens_code;
-                            return true;
-                        }
-                        //skip ifik
-                        else
-                        {
-                            //finding end ifik()
-                            while (!element[lens_code].Contains('}'))
+                            //if true
+                            if (Convert.ToDouble(el_1) < Convert.ToDouble(el_3))
                             {
-                                lens_code++;
+                                //wenting 'ifik' 
+                                if_true = 1;
+                                return true;
                             }
-                            return true;
-                        }
-                        break;
-                    }
-                case ">=":
-                    {
-                        //if true
-                        if (Convert.ToDouble(el_1) >= Convert.ToDouble(el_3))
-                        {
-                           // ++lens_code;
-                            return true;
-                        }
-                        //skip ifik
-                        else
-                        {
-                            //finding end ifik()
-                            while (!element[lens_code].Contains('}'))
+                            //skip ifik
+                            else
                             {
-                                lens_code++;
+                                //finding end ifik()
+                                while (!element[lens_code].Contains('}'))
+                                {
+                                    lens_code++;
+                                }
+                                return true;
                             }
-                            return true;
+                            break;
                         }
-                        break;
-                    }
-                case "<=":
-                    {
-                        //if true
-                        if (Convert.ToDouble(el_1) <= Convert.ToDouble(el_3))
+                    case "==":
                         {
-                           // ++lens_code;
-                            return true;
-                        }
-                        //skip ifik
-                        else
-                        {
-                            //finding end ifik()
-                            while (!element[lens_code].Contains('}'))
+                            //if true
+                            if (Convert.ToDouble(el_1) == Convert.ToDouble(el_3))
                             {
-                                lens_code++;
+                                //wenting 'ifik' 
+                                if_true = 1;
+                                return true;
                             }
-                            return true;
+                            //skip ifik
+                            else
+                            {
+                                //finding end ifik()
+                                while (!element[lens_code].Contains('}'))
+                                {
+                                    lens_code++;
+                                }
+                                return true;
+                            }
+                            break;
                         }
-                        break;
-                    }
+                    case ">=":
+                        {
+                            //if true
+                            if (Convert.ToDouble(el_1) >= Convert.ToDouble(el_3))
+                            {
+                                //wenting 'ifik' 
+                                if_true = 1;
+                                return true;
+                            }
+                            //skip ifik
+                            else
+                            {
+                                //finding end ifik()
+                                while (!element[lens_code].Contains('}'))
+                                {
+                                    lens_code++;
+                                }
+                                return true;
+                            }
+                            break;
+                        }
+                    case "<=":
+                        {
+                            //if true
+                            if (Convert.ToDouble(el_1) <= Convert.ToDouble(el_3))
+                            {
+                                //wenting 'ifik' 
+                                if_true = 1;
+                                return true;
+                            }
+                            //skip ifik
+                            else
+                            {
+                                //finding end ifik()
+                                while (!element[lens_code].Contains('}'))
+                                {
+                                    lens_code++;
+                                }
+                                return true;
+                            }
+                            break;
+                        }
+                }
             }
+            catch (FormatException) { otp.Text = $"Invalid data: {str}"; return false; }
             return true;
-        }      
+        }
     }
 }
