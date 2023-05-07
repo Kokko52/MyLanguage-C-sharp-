@@ -110,7 +110,6 @@ namespace MyLanguage
                                 }
                                     return true;
                             }
-                            break;
                         }
                     case "<":
                         {
@@ -131,7 +130,6 @@ namespace MyLanguage
                                 }
                                 return true;
                             }
-                            break;
                         }
                     case "==":
                         {
@@ -152,7 +150,6 @@ namespace MyLanguage
                                 }
                                 return true;
                             }
-                            break;
                         }
                     case ">=":
                         {
@@ -173,7 +170,6 @@ namespace MyLanguage
                                 }
                                 return true;
                             }
-                            break;
                         }
                     case "<=":
                         {

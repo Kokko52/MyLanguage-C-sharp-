@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,8 +10,8 @@ namespace MyLanguage
 {
     internal class new_data_for_int
     {
-
-        public bool run(string[] element, int lens_code, Dictionary<string, int> list_int, string variable)
+        public int lens_code;
+        public bool run(string[] element, Dictionary<string, int> list_int, string variable)
         {
             string[] symbols = new string[] { "+", "-", "*", "/" };
 

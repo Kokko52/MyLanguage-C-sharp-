@@ -39,7 +39,8 @@ namespace MyLanguage
         public int _if = 0;
         //checking brackets
         public int _sk = 0;
-        public int check_for;
+        public int check_for, check_wh = 0;
+        public int end_wh = 0;
         public MyLanguage()
         {
             InitializeComponent();
@@ -79,6 +80,14 @@ namespace MyLanguage
                 element[i] = element[i].Trim();
             }
 
+            for (int i = 0; i < element.Length; i++)
+            {
+                if (element[i] == "};")
+                {
+                    end_wh = i;
+                    break;
+                }
+            }
             #region main func - 'KV'
             //main func 'KV{'
             if (element[0] != "KV")
@@ -96,13 +105,14 @@ namespace MyLanguage
             int lens_code = 1;
             while (lens_code < element.Length)
             {
+                m_return:
                 #region checking brackets
-                //skip null line
-                if (element[lens_code] == "") { }
-                //exists brackets '{'
-                else if (element[lens_code] == "{" || element[lens_code][element[lens_code].Length - 1] == '{') { _sk++; }
-                //exists brackets '}'
-                else if (element[lens_code] == "}" || element[lens_code] == "};" || element[lens_code][element[lens_code].Length - 1] == '}') { _sk--; }
+                ////skip null line
+                //if (element[lens_code] == "") { }
+                ////exists brackets '{'
+                //else if (element[lens_code] == "{" || element[lens_code][element[lens_code].Length - 1] == '{') { _sk++; }
+                ////exists brackets '}'
+                //else if (element[lens_code] == "}" || element[lens_code] == "};" || element[lens_code][element[lens_code].Length - 1] == '}') { _sk--; }
                 #endregion
 
                 //kv.print
@@ -113,6 +123,7 @@ namespace MyLanguage
                     if (!kvprint.run(list_int, list_string, list_double, otp)) { break; }
                 }
 
+                #region Data types
                 //kvint
                 if (element[lens_code].Split(' ')[0] == "kvint")
                 {
@@ -134,7 +145,9 @@ namespace MyLanguage
                     kvdouble.str = element[lens_code].Trim();
                     if (!kvdouble.run(list_int, list_string, list_double, otp)) { break; };
                 }
+                #endregion
 
+                #region if-else
                 //ifik
                 if (element[lens_code].Split(' ')[0] == "ifik")
                 {
@@ -171,7 +184,9 @@ namespace MyLanguage
                     //clear
                     _if = 0;
                 }
+                #endregion
 
+                #region cycle
                 //for
                 if (element[lens_code].Split(' ')[0] == "for")
                 {
@@ -183,7 +198,7 @@ namespace MyLanguage
                     _for.run(otp, element);
                 }
                 //end for
-                if (element[lens_code].Split(' ')[0] == "};")
+                if (element[lens_code].Split(' ')[0] == "!")
                 {
                     if (check_for == 0) { otp.Text = "Invalid syntax: ..."; }
                     lens_code = check_for;
@@ -191,23 +206,47 @@ namespace MyLanguage
 
                 //while
                 if (element[lens_code].Split(' ')[0] == "while")
-                {
+                {     
                     @while _while = new @while();
                     _while.str = element[lens_code].Replace(" ", "");
-                    _while.run(list_int, list_string, list_double, otp);
+                    if (_while.run(list_int, list_string, list_double, otp)) { check_wh = lens_code; }
+                    else { lens_code = end_wh + 1; goto m_return; }
                 }
 
+                //end while
+                if (element[lens_code].Trim() == "};")
+                {
+                    if (check_wh == 0) 
+                    { 
+                        otp.Text = "Invalid syntax: ...";
+                        break;
+                    }
+                    else if (check_wh == -1) 
+                    { }
+                    else { 
+                        lens_code = check_wh - 1; 
+                    }
+                }
+                #endregion
+
+                #region New data for variable
                 //variable - int
                 if (list_int.ContainsKey(element[lens_code].Split(' ')[0]))
                 {
                     new_data_for_int cls = new new_data_for_int();
-                    cls.run(element, lens_code, list_int, element[lens_code].Split(' ')[0]);
+                    cls.lens_code = lens_code;
+                    cls.run(element, list_int, element[lens_code].Split(' ')[0]);
+                    lens_code = cls.lens_code;
+
                 }
-                else if(list_double.ContainsKey(element[lens_code].Split(' ')[0]))
+                //variable - double
+                else if (list_double.ContainsKey(element[lens_code].Split(' ')[0]))
                 {
                     new_data_for_double cls = new new_data_for_double();
                     cls.run(element, lens_code, list_double, element[lens_code].Split(' ')[0]);
                 }
+                #endregion
+
                 ++lens_code;
             }
             #region Error: checking brackets

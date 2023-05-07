@@ -72,9 +72,33 @@ namespace MyLanguage
             else { }
             #endregion
 
-            while (12 > 10 )
+            switch (smbl)
             {
-                //
+                case ">":
+                    {
+                        if (Convert.ToDouble(value_1) > Convert.ToDouble(value_2)) { return true; }
+                        else { return false; }
+                    }
+                case "<":
+                    {
+                        if (Convert.ToDouble(value_1) < Convert.ToDouble(value_2)) { return true; }
+                        else { return false; }
+                    }
+                case "==":
+                    {
+                        if (Convert.ToDouble(value_1) == Convert.ToDouble(value_2)) { return true; }
+                        else { return false; }
+                    }
+                case ">=":
+                    {
+                        if (Convert.ToDouble(value_1) >= Convert.ToDouble(value_2)) { return true; }
+                        else { return false; }
+                    }
+                case "<=":
+                    {
+                        if (Convert.ToDouble(value_1) <= Convert.ToDouble(value_2)) { return true; }
+                        else { return false; }
+                    }
             }
             return true;
         }
