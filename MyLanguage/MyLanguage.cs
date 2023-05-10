@@ -21,6 +21,7 @@ namespace MyLanguage
         //textBox2 - otp
         public TextBox otp = new TextBox();
         #endregion
+
         #region Storages Variables
         //list int
         public Dictionary<string, int> list_int = new Dictionary<string, int>();
@@ -29,6 +30,11 @@ namespace MyLanguage
         //list double
         public Dictionary<string, double> list_double = new Dictionary<string, double>();
         #endregion
+
+        //list functions
+        public Dictionary<string, string> list_func = new Dictionary<string, string>(); // name + variabes
+        public Dictionary<string, string> list_func_result = new Dictionary<string, string>(); // name + result
+        public Dictionary<string, int> list_func_str = new Dictionary<string, int>(); // name + №string
         //original string
         public string str;
         //lines
@@ -41,6 +47,11 @@ namespace MyLanguage
         public int _sk = 0;
         public int check_for, check_wh = 0;
         public int end_wh = 0;
+        public int func_start, last_lens_code;
+        public bool func_check = false;
+        public string name_func;
+        public string func_name_and_var;
+        public string result;
         public MyLanguage()
         {
             InitializeComponent();
@@ -80,32 +91,46 @@ namespace MyLanguage
                 element[i] = element[i].Trim();
             }
 
-            for (int i = 0; i < element.Length; i++)
-            {
-                if (element[i] == "};")
-                {
-                    end_wh = i;
-                    break;
-                }
-            }
             #region main func - 'KV'
-            //main func 'KV{'
-            if (element[0] != "KV")
-            {
-                otp.Text = $"Syntax error: main function not found - {element[0]}";
-                return;
-            }
-            //end main func - KV
-            if (element[element.Length - 1] != "}")
-            {
-                otp.Text = "Syntax error: end main function not found";
-                return;
-            }
+            ////main func 'KV{'
+            //if (element[0] != "KV")
+            //{
+            //    otp.Text = $"Syntax error: main function not found - {element[0]}";
+            //    return;
+            //}
+            ////end main func - KV
+            //if (element[element.Length - 1] != "}")
+            //{
+            //    otp.Text = "Syntax error: end main function not found";
+            //    return;
+            //}
             #endregion
-            int lens_code = 1;
+            int lens_code = 0;
+            //func
+            while (element[lens_code] != "KV{")
+            {
+                if (element[lens_code].Split(' ')[0] == "func")
+                {
+
+                    func_start = lens_code + 1;
+
+                    string name_func = element[lens_code].Split(' ')[1].Split('(')[0].Trim();
+                    string opt = element[lens_code].Split('(')[1].Split(')')[0];
+                    if (list_func.ContainsKey(name_func)) { otp.Text = $"Invalid syntax: a function {name_func} with this name already exists"; return; }
+                    list_func.Add(name_func, opt/* Convert.ToString(func_start)*/);
+                    list_func_str.Add(name_func, func_start);
+                }
+                lens_code++;
+            }
+            while (element[lens_code] != "KV{")
+            {
+                lens_code++;
+            }
+
+            //lens_code = 1;
             while (lens_code < element.Length)
             {
-                m_return:
+            m_return:
                 #region checking brackets
                 ////skip null line
                 //if (element[lens_code] == "") { }
@@ -115,12 +140,72 @@ namespace MyLanguage
                 //else if (element[lens_code] == "}" || element[lens_code] == "};" || element[lens_code][element[lens_code].Length - 1] == '}') { _sk--; }
                 #endregion
 
+
+                //name functions
+                for (int i = 0; i < list_func.Count; i++)
+                {
+                    if (element[lens_code].Contains(list_func.ElementAt(i).Key))
+                    {
+                        last_lens_code = lens_code;
+                        func_check = true;
+                        //values
+                        string func_date = element[lens_code].Replace(list_func.ElementAt(i).Key, "~").Split('~')[1].Replace("(", "").Replace(")", "");
+                        func func = new func();
+                        //name function
+                        func.func_name = list_func.ElementAt(i).Key;
+                        //values function
+                        func.func_value = func_date;
+                        func.lens_code = lens_code;
+                        func.run(list_int, list_string, list_double, list_func, otp, element);
+                        //lens_code = func_start;
+                        func_name_and_var = func.func_name + "(" + func.func_value + ")";
+                        result = func.result;
+                        name_func = func.func_name;
+                        element[lens_code] = element[lens_code].Replace(func_name_and_var, func.result);
+                        lens_code = list_func_str[func.func_name];
+                    }
+                }
+                if (func_check)
+                {
+                    element[lens_code].Replace(func_name_and_var, result);
+                    func_check = false;
+                }
+                if (element[lens_code].Contains("func " + name_func))
+                {
+                    while (!element[lens_code].Contains("ret"))
+                    {
+                        lens_code++;
+                    }
+                    list_func_result.Add(name_func, element[lens_code].Split(' ')[1]);
+                    lens_code = last_lens_code;
+                }
+
                 //kv.print
                 if (element[lens_code].Split(' ')[0] == "kv.print")
                 {
                     kvprint kvprint = new kvprint();
                     kvprint.str = element[lens_code].Trim();
                     if (!kvprint.run(list_int, list_string, list_double, otp)) { break; }
+                }
+
+                if (element[lens_code].Split(' ')[0] == "ret")
+                {
+                    string func_res = element[lens_code].Split(' ')[1];
+                    if (list_int.ContainsKey(func_res))
+                    {
+                        func_res = Convert.ToString(list_int[func_res]);
+                    }
+                    else if (list_string.ContainsKey(func_res))
+                    {
+                        func_res = list_string[func_res];
+                    }
+                    else if (list_double.ContainsKey(func_res))
+                    {
+                        func_res = Convert.ToString(list_double[func_res]);
+                    }
+                    else
+                    { }
+                    //  list_func_result.Add();
                 }
 
                 #region Data types
@@ -206,25 +291,35 @@ namespace MyLanguage
 
                 //while
                 if (element[lens_code].Split(' ')[0] == "while")
-                {     
+                {
+                    //find end while
+                    for (int i = lens_code; i < element.Length; i++)
+                    {
+                        if (element[i] == "};")
+                        {
+                            end_wh = i;
+                            break;
+                        }
+                    }
+
                     @while _while = new @while();
                     _while.str = element[lens_code].Replace(" ", "");
                     if (_while.run(list_int, list_string, list_double, otp)) { check_wh = lens_code; }
                     else { lens_code = end_wh + 1; goto m_return; }
                 }
-
                 //end while
                 if (element[lens_code].Trim() == "};")
                 {
-                    if (check_wh == 0) 
-                    { 
+                    if (check_wh == 0)
+                    {
                         otp.Text = "Invalid syntax: ...";
                         break;
                     }
-                    else if (check_wh == -1) 
+                    else if (check_wh == -1)
                     { }
-                    else { 
-                        lens_code = check_wh - 1; 
+                    else
+                    {
+                        lens_code = check_wh - 1;
                     }
                 }
                 #endregion
@@ -243,18 +338,27 @@ namespace MyLanguage
                 else if (list_double.ContainsKey(element[lens_code].Split(' ')[0]))
                 {
                     new_data_for_double cls = new new_data_for_double();
-                    cls.run(element, lens_code, list_double, element[lens_code].Split(' ')[0]);
+                    cls.run(element, lens_code, list_double, list_int, element[lens_code].Split(' ')[0]);
                 }
                 #endregion
+
 
                 ++lens_code;
             }
             #region Error: checking brackets
-            if (_sk > 1) { otp.Text = "Invalid syntax: missing closing brackets"; }
-            else if (_sk > 0) { otp.Text = "Invalid syntax: missing closing bracket"; }
-            else if (_sk == -1) { otp.Text = "Invalid syntax: missing opening bracket"; }
-            else if (_sk < 0) { otp.Text = "Invalid syntax: missing opening brackets"; }
+            //if (_sk > 1) { otp.Text = "Invalid syntax: missing closing brackets"; }
+            //else if (_sk > 0) { otp.Text = "Invalid syntax: missing closing bracket"; }
+            //else if (_sk == -1) { otp.Text = "Invalid syntax: missing opening bracket"; }
+            //else if (_sk < 0) { otp.Text = "Invalid syntax: missing opening brackets"; }
             #endregion
+        }
+
+        private void blackToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.BackColor = Color.FromArgb(30, 30, 30);
+            code.BackColor = Color.FromArgb(30, 30, 30);
+            otp.BackColor = Color.FromArgb(30, 30, 30);
+            // label1.BackColor = Color.FromArgb(53, 53, 53);
         }
 
         private void runToolStripMenuItem_Click(object sender, EventArgs e)
@@ -264,6 +368,9 @@ namespace MyLanguage
             list_int.Clear();
             list_string.Clear();
             list_double.Clear();
+            list_func.Clear();
+            list_func_result.Clear();
+            list_func_str.Clear();
             lens_code = 0;
             _sk = 0;
             //

@@ -64,7 +64,6 @@ namespace MyLanguage
                     line_split_list.RemoveAt(cnt - 1);
                     line_split = (string[])line_split_list.ToArray(typeof(string));
                     cnt = 0;
-                    //
                 }
                 else if (line_split[cnt] == "/")
                 {

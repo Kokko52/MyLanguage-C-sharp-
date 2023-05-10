@@ -9,7 +9,7 @@ namespace MyLanguage
 {
     internal class new_data_for_double
     {
-        public bool run(string[] element, int lens_code, Dictionary<string, double> list_double, string variable)
+        public bool run(string[] element, int lens_code, Dictionary<string, double> list_double, Dictionary<string, int> list_int, string variable)
         {
             string[] symbols = new string[] { "+", "-", "*", "/" };
 
@@ -46,6 +46,10 @@ namespace MyLanguage
                 if (list_double.ContainsKey(line_split[cnt]))
                 {
                     line_split[cnt] = Convert.ToString(list_double[line_split[cnt]]);
+                }
+                if(list_int.ContainsKey(line_split[cnt]))
+                {
+                    line_split[cnt] = Convert.ToString(list_int[line_split[cnt]]);
                 }
                 ++cnt;
             }
