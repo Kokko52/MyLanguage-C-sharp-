@@ -22,10 +22,10 @@ D:\Учеба\3_курс\Практика\4-5 неделя\MyLanguage\bin\Debug\
 D:\Kokurin\4-5 неделя\MyLanguage\bin\Debug\MyLanguage.exe.config
 D:\Kokurin\4-5 неделя\MyLanguage\bin\Debug\MyLanguage.exe
 D:\Kokurin\4-5 неделя\MyLanguage\bin\Debug\MyLanguage.pdb
-D:\Kokurin\4-5 неделя\MyLanguage\obj\Debug\MyLanguage.csproj.AssemblyReference.cache
 D:\Kokurin\4-5 неделя\MyLanguage\obj\Debug\MyLanguage.MyLanguage.resources
 D:\Kokurin\4-5 неделя\MyLanguage\obj\Debug\MyLanguage.Properties.Resources.resources
 D:\Kokurin\4-5 неделя\MyLanguage\obj\Debug\MyLanguage.csproj.GenerateResource.cache
 D:\Kokurin\4-5 неделя\MyLanguage\obj\Debug\MyLanguage.csproj.CoreCompileInputs.cache
 D:\Kokurin\4-5 неделя\MyLanguage\obj\Debug\MyLanguage.exe
 D:\Kokurin\4-5 неделя\MyLanguage\obj\Debug\MyLanguage.pdb
+D:\Kokurin\4-5 неделя\MyLanguage\obj\Debug\MyLanguage.csproj.AssemblyReference.cache

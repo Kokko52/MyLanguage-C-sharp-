@@ -48,9 +48,13 @@ namespace MyLanguage
         public int check_for, check_wh = 0;
         public int end_wh = 0;
         public int func_start, last_lens_code;
+        //check func
         public bool func_check = false;
+        //name func
         public string name_func;
+        //name functions and its values
         public string func_name_and_var;
+        //result func
         public string result;
         public MyLanguage()
         {
@@ -63,7 +67,7 @@ namespace MyLanguage
             code.Multiline = true;
             code.ScrollBars = ScrollBars.Both;
             code.Text = "KV{}";
-            code.Font = new Font("Times New Roman", 14);
+            code.Font = new Font("Times New Roman", 16);
             Controls.Add(code);
             //
 
@@ -72,7 +76,7 @@ namespace MyLanguage
             otp.Size = new Size(845, 118);
             otp.Multiline = true;
             otp.ScrollBars = ScrollBars.Both;
-            otp.Font = new Font("Times New Roman", 14);
+            otp.Font = new Font("Times New Roman", 16);
             otp.ReadOnly = true;
             Controls.Add(otp);
             #endregion
@@ -131,19 +135,336 @@ namespace MyLanguage
             while (lens_code < element.Length)
             {
             m_return:
-                #region checking brackets
-                ////skip null line
-                //if (element[lens_code] == "") { }
-                ////exists brackets '{'
-                //else if (element[lens_code] == "{" || element[lens_code][element[lens_code].Length - 1] == '{') { _sk++; }
-                ////exists brackets '}'
-                //else if (element[lens_code] == "}" || element[lens_code] == "};" || element[lens_code][element[lens_code].Length - 1] == '}') { _sk--; }
+
+            #region checking brackets
+            ////skip null line
+            //if (element[lens_code] == "") { }
+            ////exists brackets '{'
+            //else if (element[lens_code] == "{" || element[lens_code][element[lens_code].Length - 1] == '{') { _sk++; }
+            ////exists brackets '}'
+            //else if (element[lens_code] == "}" || element[lens_code] == "};" || element[lens_code][element[lens_code].Length - 1] == '}') { _sk--; }
+            #endregion
+
+            #region math library
+            m_math_lib:
+                //Math.Round
+                if (element[lens_code].Contains("Math.Round"))
+                {
+                    string str = element[lens_code];
+                    int last = element[lens_code].LastIndexOf("Math.Round{");
+                    string mth = "";
+                    while (element[lens_code][last] != '}')
+                    {
+                        mth += element[lens_code][last];
+                        ++last;
+                    }
+                    //date
+                    string new_var = mth.Split('{')[1];
+
+                    #region Date variables
+                    if (list_int.ContainsKey(new_var))
+                    {
+                        new_var = Convert.ToString(list_int[new_var]);
+                    }
+                    else if (list_double.ContainsKey(new_var))
+                    {
+                        new_var = Convert.ToString(list_double[new_var]);
+                    }
+                    else if (list_string.ContainsKey(new_var))
+                    {
+                        new_var = list_string[new_var];
+                    }
+                    else { }
+                    #endregion
+
+                    double value = Math.Round(Convert.ToDouble(new_var));
+                    element[lens_code] = element[lens_code].Replace("Math.Round{" + new_var + "}", Convert.ToString(value));
+                    goto m_math_lib;
+                }
+                //Math.Floor
+                if (element[lens_code].Contains("Math.Floor"))
+                {
+                    string str = element[lens_code];
+                    int last = element[lens_code].LastIndexOf("Math.Floor{");
+                    string mth = "";
+                    while (element[lens_code][last] != '}')
+                    {
+                        mth += element[lens_code][last];
+                        ++last;
+                    }
+                    //date
+                    string new_var = mth.Split('{')[1];
+
+                    #region Date variables
+                    if (list_int.ContainsKey(new_var))
+                    {
+                        new_var = Convert.ToString(list_int[new_var]);
+                    }
+                    else if (list_double.ContainsKey(new_var))
+                    {
+                        new_var = Convert.ToString(list_double[new_var]);
+                    }
+                    else if (list_string.ContainsKey(new_var))
+                    {
+                        new_var = list_string[new_var];
+                    }
+                    else { }
+                    #endregion
+
+                    double value = Math.Floor(Convert.ToDouble(new_var));
+                    element[lens_code] = element[lens_code].Replace("Math.Floor{" + new_var + "}", Convert.ToString(value));
+                    goto m_math_lib;
+                }
+                //Math.Ceiling
+                if (element[lens_code].Contains("Math.Ceiling"))
+                {
+                    string str = element[lens_code];
+                    int last = element[lens_code].LastIndexOf("Math.Ceiling{");
+                    string mth = "";
+                    while (element[lens_code][last] != '}')
+                    {
+                        mth += element[lens_code][last];
+                        ++last;
+                    }
+                    //date
+                    string new_var = mth.Split('{')[1];
+
+                    #region Date variables
+                    if (list_int.ContainsKey(new_var))
+                    {
+                        new_var = Convert.ToString(list_int[new_var]);
+                    }
+                    else if (list_double.ContainsKey(new_var))
+                    {
+                        new_var = Convert.ToString(list_double[new_var]);
+                    }
+                    else if (list_string.ContainsKey(new_var))
+                    {
+                        new_var = list_string[new_var];
+                    }
+                    else { }
+                    #endregion
+
+                    double value = Math.Ceiling(Convert.ToDouble(new_var));
+                    element[lens_code] = element[lens_code].Replace("Math.Ceiling{" + new_var + "}", Convert.ToString(value));
+                    goto m_math_lib;
+                }
+                //Math.Sign
+                if (element[lens_code].Contains("Math.Sign"))
+                {
+                    string str = element[lens_code];
+                    int last = element[lens_code].LastIndexOf("Math.Sign{");
+                    string mth = "";
+                    while (element[lens_code][last] != '}')
+                    {
+                        mth += element[lens_code][last];
+                        ++last;
+                    }
+                    //date
+                    string new_var = mth.Split('{')[1];
+
+                    #region Date variables
+                    if (list_int.ContainsKey(new_var))
+                    {
+                        new_var = Convert.ToString(list_int[new_var]);
+                    }
+                    else if (list_double.ContainsKey(new_var))
+                    {
+                        new_var = Convert.ToString(list_double[new_var]);
+                    }
+                    else if (list_string.ContainsKey(new_var))
+                    {
+                        new_var = list_string[new_var];
+                    }
+                    else { }
+                    #endregion
+
+                    double value = Math.Sign(Convert.ToDouble(new_var));
+                    element[lens_code] = element[lens_code].Replace("Math.Sign{" + new_var + "}", Convert.ToString(value));
+                    goto m_math_lib;
+                }
+                //Math.Pow
+                if (element[lens_code].Contains("Math.Pow"))
+                {
+                    string str = element[lens_code];
+                    int last = element[lens_code].LastIndexOf("Math.Pow{");
+                    string mth = "";
+                    while (element[lens_code][last] != '}')
+                    {
+                        mth += element[lens_code][last];
+                        ++last;
+                    }                    //date
+
+                    string new_var = mth.Split('{')[1];
+                    string[] variables = new_var.Split(';');
+                    #region Date variables
+                    if (list_int.ContainsKey(new_var))
+                    {
+                        new_var = Convert.ToString(list_int[new_var]);
+                    }
+                    else if (list_double.ContainsKey(new_var))
+                    {
+                        new_var = Convert.ToString(list_double[new_var]);
+                    }
+                    else if (list_string.ContainsKey(new_var))
+                    {
+                        new_var = list_string[new_var];
+                    }
+                    else { }
+                    #endregion
+
+                    double value = Math.Pow(Convert.ToDouble(variables[0]), Convert.ToDouble(variables[1]));
+                    value = Math.Round(value, 2);
+                    //error!!!!!!!!!!!!!!!!!!!!!!         
+                    element[lens_code] = element[lens_code].Replace("Math.Pow{" + new_var + "}", Convert.ToString(value));
+                    goto m_math_lib;
+                }
+                //Math.Cos
+                if (element[lens_code].Contains("Math.Cos"))
+                {
+                    string str = element[lens_code];
+                    int last = element[lens_code].LastIndexOf("Math.Cos{");
+                    string mth = "";
+                    while (element[lens_code][last] != '}')
+                    {
+                        mth += element[lens_code][last];
+                        ++last;
+                    }
+                    //date
+                    string new_var = mth.Split('{')[1];
+
+                    #region Date variables
+                    if (list_int.ContainsKey(new_var))
+                    {
+                        new_var = Convert.ToString(list_int[new_var]);
+                    }
+                    else if (list_double.ContainsKey(new_var))
+                    {
+                        new_var = Convert.ToString(list_double[new_var]);
+                    }
+                    else if (list_string.ContainsKey(new_var))
+                    {
+                        new_var = list_string[new_var];
+                    }
+                    else { }
+                    #endregion
+
+                    double value = Math.Cos(Convert.ToDouble(new_var));
+                    element[lens_code] = element[lens_code].Replace("Math.Cos{" + new_var + "}", Convert.ToString(value));
+                    goto m_math_lib;
+                }
+                //Math.Sinh
+                if (element[lens_code].Contains("Math.Sinh"))
+                {
+                    string str = element[lens_code];
+                    int last = element[lens_code].LastIndexOf("Math.Sinh{");
+                    string mth = "";
+                    while (element[lens_code][last] != '}')
+                    {
+                        mth += element[lens_code][last];
+                        ++last;
+                    }
+                    //date
+                    string new_var = mth.Split('{')[1];
+
+                    #region Date variables
+                    if (list_int.ContainsKey(new_var))
+                    {
+                        new_var = Convert.ToString(list_int[new_var]);
+                    }
+                    else if (list_double.ContainsKey(new_var))
+                    {
+                        new_var = Convert.ToString(list_double[new_var]);
+                    }
+                    else if (list_string.ContainsKey(new_var))
+                    {
+                        new_var = list_string[new_var];
+                    }
+                    else { }
+                    #endregion
+
+                    double value = Math.Sinh(Convert.ToDouble(new_var));
+                    element[lens_code] = element[lens_code].Replace("Math.Sinh{" + new_var + "}", Convert.ToString(value));
+                    goto m_math_lib;
+                }
+                //Math.Sin
+                if (element[lens_code].Contains("Math.Sin"))
+                {
+                    string str = element[lens_code];
+                    int last = element[lens_code].LastIndexOf("Math.Sin{");
+                    string mth = "";
+                    while (element[lens_code][last] != '}')
+                    {
+                        mth += element[lens_code][last];
+                        ++last;
+                    }
+                    //date
+                    string new_var = mth.Split('{')[1];
+
+                    #region Date variables
+                    if (list_int.ContainsKey(new_var))
+                    {
+                        new_var = Convert.ToString(list_int[new_var]);
+                    }
+                    else if (list_double.ContainsKey(new_var))
+                    {
+                        new_var = Convert.ToString(list_double[new_var]);
+                    }
+                    else if (list_string.ContainsKey(new_var))
+                    {
+                        new_var = list_string[new_var];
+                    }
+                    else { }
+                    #endregion
+
+                    double value = Math.Sin(Convert.ToDouble(new_var));
+                    element[lens_code] = element[lens_code].Replace("Math.Sin{" + new_var + "}", Convert.ToString(value));
+                    goto m_math_lib;
+                }
+                //Math.Sqrt
+                if (element[lens_code].Contains("Math.Sqrt"))
+                {
+                    string str = element[lens_code];
+                    int last = element[lens_code].LastIndexOf("Math.Sqrt{");
+                    string mth = "";
+                    while (element[lens_code][last] != '}')
+                    {
+                        mth += element[lens_code][last];
+                        ++last;
+                    }
+                    //date
+                    string new_var = mth.Split('{')[1];
+
+                    #region Date variables
+                    if (list_int.ContainsKey(new_var))
+                    {
+                        new_var = Convert.ToString(list_int[new_var]);
+                    }
+                    else if (list_double.ContainsKey(new_var))
+                    {
+                        new_var = Convert.ToString(list_double[new_var]);
+                    }
+                    else if (list_string.ContainsKey(new_var))
+                    {
+                        new_var = list_string[new_var];
+                    }
+                    else { }
+                    #endregion
+
+                    double value = Math.Sqrt(Convert.ToDouble(new_var));
+                    element[lens_code] = element[lens_code].Replace("Math.Sqrt{" + new_var + "}", Convert.ToString(value));
+                    goto m_math_lib;
+                }
                 #endregion
 
+             #region str library
+                #endregion
 
+                #region func
                 //name functions
                 for (int i = 0; i < list_func.Count; i++)
                 {
+                    //if exist func
                     if (element[lens_code].Contains(list_func.ElementAt(i).Key))
                     {
                         last_lens_code = lens_code;
@@ -155,7 +476,7 @@ namespace MyLanguage
                         func.func_name = list_func.ElementAt(i).Key;
                         //values function
                         func.func_value = func_date;
-                        func.lens_code = lens_code;
+                        func.lens_code = list_func_str[func.func_name];
                         func.run(list_int, list_string, list_double, list_func, otp, element);
                         //lens_code = func_start;
                         func_name_and_var = func.func_name + "(" + func.func_value + ")";
@@ -165,11 +486,13 @@ namespace MyLanguage
                         lens_code = list_func_str[func.func_name];
                     }
                 }
+                //check
                 if (func_check)
                 {
                     element[lens_code].Replace(func_name_and_var, result);
                     func_check = false;
                 }
+                //replace
                 if (element[lens_code].Contains("func " + name_func))
                 {
                     while (!element[lens_code].Contains("ret"))
@@ -179,15 +502,7 @@ namespace MyLanguage
                     list_func_result.Add(name_func, element[lens_code].Split(' ')[1]);
                     lens_code = last_lens_code;
                 }
-
-                //kv.print
-                if (element[lens_code].Split(' ')[0] == "kv.print")
-                {
-                    kvprint kvprint = new kvprint();
-                    kvprint.str = element[lens_code].Trim();
-                    if (!kvprint.run(list_int, list_string, list_double, otp)) { break; }
-                }
-
+                //if end functions
                 if (element[lens_code].Split(' ')[0] == "ret")
                 {
                     string func_res = element[lens_code].Split(' ')[1];
@@ -205,8 +520,19 @@ namespace MyLanguage
                     }
                     else
                     { }
+                    lens_code = last_lens_code;
+                    goto m_return;
                     //  list_func_result.Add();
                 }
+
+                //kv.print
+                if (element[lens_code].Split(' ')[0] == "kv.print")
+                {
+                    kvprint kvprint = new kvprint();
+                    kvprint.str = element[lens_code].Trim();
+                    if (!kvprint.run(list_int, list_string, list_double, otp)) { break; }
+                }
+                #endregion
 
                 #region Data types
                 //kvint
@@ -271,24 +597,7 @@ namespace MyLanguage
                 }
                 #endregion
 
-                #region cycle
-                //for
-                if (element[lens_code].Split(' ')[0] == "for")
-                {
-                    check_for = lens_code;
-                    @for _for = new @for();
-                    _for.str = element[lens_code].Trim();
-                    _for.lens_code = lens_code;
-
-                    _for.run(otp, element);
-                }
-                //end for
-                if (element[lens_code].Split(' ')[0] == "!")
-                {
-                    if (check_for == 0) { otp.Text = "Invalid syntax: ..."; }
-                    lens_code = check_for;
-                }
-
+                #region cycle           
                 //while
                 if (element[lens_code].Split(' ')[0] == "while")
                 {

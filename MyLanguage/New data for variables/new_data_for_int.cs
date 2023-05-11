@@ -18,10 +18,10 @@ namespace MyLanguage
             //orig string
             string line = element[lens_code].Split('=')[1].Replace(" ", "");
             //split string
-            string[] line_split = new string[line.Length];
+            string[] line_split = new string[line.Length + 1];
             //check
             int cnt = 0;
-            for (int i = 0; i < line.Length; ++i)
+            for (int i = 0; i < line.Length + 1; ++i)
             {
                 //add elements
                 while (line[cnt] != '+' && line[cnt] != '-' && line[cnt] != '*' && line[cnt] != '/' && cnt < line.Length)

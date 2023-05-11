@@ -57,6 +57,40 @@ namespace MyLanguage
             }
             #endregion
 
+            #region Date variables
+            // Variable 1
+            if (list_int.ContainsKey(val1))
+            {
+                val1 = Convert.ToString(list_int[val1]);
+            }
+            else if (list_double.ContainsKey(val1))
+            {
+                val1 = Convert.ToString(list_double[val1]);
+            }
+            else if (list_string.ContainsKey(val1))
+            {
+                val1 = list_string[val1];
+            }
+            else { }
+            ////
+
+            // Variable 2
+            if (list_int.ContainsKey(val2))
+            {
+                val2= Convert.ToString(list_int[val2]);
+            }
+            else if (list_double.ContainsKey(val2))
+            {
+                val2 = Convert.ToString(list_double[val2]);
+            }
+            else if (list_string.ContainsKey(val2))
+            {
+                val2 = list_string[val2];
+            }
+            else { }
+            ////
+            #endregion
+
             #region Variable 1
             if (int.TryParse(val1, out int val_int) && list_func_value[0].Split(' ')[0] == "kvint" && !val1.Contains("\""))
             {
@@ -93,7 +127,6 @@ namespace MyLanguage
                 else { otp.Text = "Invalid syntax: ..."; }
                 #endregion
             }
-            lens_code = 0;
             while(!element[lens_code].Contains("ret"))
             {
                 ++lens_code;

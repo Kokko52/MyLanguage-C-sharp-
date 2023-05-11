@@ -22,3 +22,31 @@ ret n3
 KV{
 kv.print (main(3, 7))
 }
+
+
+
+
+
+
+func main(kvdouble n1, kvint n2){
+kvdouble n3 = 1,1
+n3 = n1 + n2
+ret n3
+}
+KV{
+kv.print (main(3,1; 7))
+}
+
+
+func_name_and_var
+
+
+
+func main(kvint n1, kvint n2){
+kvint n3 = 1
+n3 = n1 + n2
+ret n3
+}
+KV{
+kv.print (main(3, 7))
+}
