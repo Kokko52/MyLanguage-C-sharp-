@@ -145,7 +145,7 @@ namespace MyLanguage
             //else if (element[lens_code] == "}" || element[lens_code] == "};" || element[lens_code][element[lens_code].Length - 1] == '}') { _sk--; }
             #endregion
 
-            #region math library
+                #region math library
             m_math_lib:
                 //Math.Round
                 if (element[lens_code].Contains("Math.Round"))
@@ -457,7 +457,199 @@ namespace MyLanguage
                 }
                 #endregion
 
-             #region str library
+                #region str library
+                //Str.Len
+                if (element[lens_code].Contains("Str.Len"))
+                {
+                    string str = element[lens_code];
+                    int last = element[lens_code].LastIndexOf("Str.Len{");
+                    string mth = "";
+                    while (element[lens_code][last] != '}')
+                    {
+                        mth += element[lens_code][last];
+                        ++last;
+                    }
+                    //date
+                    string orig_var = mth.Split('{')[1];
+                    string new_var = orig_var;
+
+                    #region Date variables
+                    if (list_int.ContainsKey(new_var))
+                    {
+                        new_var = Convert.ToString(list_int[new_var]);
+                    }
+                    else if (list_double.ContainsKey(new_var))
+                    {
+                        new_var = Convert.ToString(list_double[new_var]);
+                    }
+                    else if (list_string.ContainsKey(new_var))
+                    {
+                        new_var = list_string[new_var];
+                    }
+                    else { }
+                    #endregion
+
+                    int value = new_var.Length;
+                    element[lens_code] = element[lens_code].Replace("Str.Len{" + orig_var + "}", Convert.ToString(value));
+                    goto m_math_lib;
+                }
+                //Str.toLower
+                if (element[lens_code].Contains("Str.toLower"))
+                {
+                    string str = element[lens_code];
+                    int last = element[lens_code].LastIndexOf("Str.toLower{");
+                    string mth = "";
+                    while (element[lens_code][last] != '}')
+                    {
+                        mth += element[lens_code][last];
+                        ++last;
+                    }
+                    //date
+                    string orig_var = mth.Split('{')[1];
+                    string new_var = orig_var;
+
+                    #region Date variables
+                    if (list_int.ContainsKey(new_var))
+                    {
+                        new_var = Convert.ToString(list_int[new_var]);
+                    }
+                    else if (list_double.ContainsKey(new_var))
+                    {
+                        new_var = Convert.ToString(list_double[new_var]);
+                    }
+                    else if (list_string.ContainsKey(new_var))
+                    {
+                        new_var = list_string[new_var];
+                    }
+                    else { }
+                    #endregion
+
+                    string value = new_var.ToLower();
+                    element[lens_code] = element[lens_code].Replace("Str.toLower{" + orig_var + "}", value);
+                    goto m_math_lib;
+                }
+                //Str.toUpper
+                if (element[lens_code].Contains("Str.toUpper"))
+                {
+                    string str = element[lens_code];
+                    int last = element[lens_code].LastIndexOf("Str.toUpper{");
+                    string mth = "";
+                    while (element[lens_code][last] != '}')
+                    {
+                        mth += element[lens_code][last];
+                        ++last;
+                    }
+                    //date
+                    string orig_var = mth.Split('{')[1];
+                    string new_var = orig_var;
+
+                    #region Date variables
+                    if (list_int.ContainsKey(new_var))
+                    {
+                        new_var = Convert.ToString(list_int[new_var]);
+                    }
+                    else if (list_double.ContainsKey(new_var))
+                    {
+                        new_var = Convert.ToString(list_double[new_var]);
+                    }
+                    else if (list_string.ContainsKey(new_var))
+                    {
+                        new_var = list_string[new_var];
+                    }
+                    else { }
+                    #endregion
+
+                    string value = new_var.ToUpper();
+                    element[lens_code] = element[lens_code].Replace("Str.toUpper{" + orig_var + "}", value);
+                    goto m_math_lib;
+                }
+                //Str.Trim
+                if (element[lens_code].Contains("Str.Trim"))
+                {
+                    string str = element[lens_code];
+                    int last = element[lens_code].LastIndexOf("Str.Trim{");
+                    string mth = "";
+                    while (element[lens_code][last] != '}')
+                    {
+                        mth += element[lens_code][last];
+                        ++last;
+                    }
+                    //date
+                    string orig_var = mth.Split('{')[1];
+                    string new_var = orig_var;
+
+                    #region Date variables
+                    if (list_int.ContainsKey(new_var))
+                    {
+                        new_var = Convert.ToString(list_int[new_var]);
+                    }
+                    else if (list_double.ContainsKey(new_var))
+                    {
+                        new_var = Convert.ToString(list_double[new_var]);
+                    }
+                    else if (list_string.ContainsKey(new_var))
+                    {
+                        new_var = list_string[new_var];
+                    }
+                    else { }
+                    #endregion
+
+                    string value = new_var.Trim();
+                    element[lens_code] = element[lens_code].Replace("Str.Trim{" + orig_var + "}", value);
+                    goto m_math_lib;
+                }
+                //Str.Compare
+                if (element[lens_code].Contains("Str.Compare"))
+                {
+                    string str = element[lens_code];
+                    int last = element[lens_code].LastIndexOf("Str.Compare{");
+                    string mth = "";
+                    while (element[lens_code][last] != '}')
+                    {
+                        mth += element[lens_code][last];
+                        ++last;
+                    }
+                    //date
+                    string orig_var = mth.Split('{')[1];
+                    string new_var1 = orig_var.Split(';')[0];
+                    string new_var2 = orig_var.Split(';')[1];
+
+                    #region Date variables
+                    //Variable 1
+                    if (list_int.ContainsKey(new_var1))
+                    {
+                        new_var1 = Convert.ToString(list_int[new_var1]);
+                    }
+                    else if (list_double.ContainsKey(new_var1))
+                    {
+                        new_var1 = Convert.ToString(list_double[new_var1]);
+                    }
+                    else if (list_string.ContainsKey(new_var1))
+                    {
+                        new_var1 = list_string[new_var1];
+                    }
+                    else { }
+
+                    //Variable 2
+                    if (list_int.ContainsKey(new_var2))
+                    {
+                        new_var2 = Convert.ToString(list_int[new_var2]);
+                    }
+                    else if (list_double.ContainsKey(new_var2))
+                    {
+                        new_var2 = Convert.ToString(list_double[new_var2]);
+                    }
+                    else if (list_string.ContainsKey(new_var2))
+                    {
+                        new_var2 = list_string[new_var2];
+                    }
+                    else { }
+                    #endregion
+
+                    int value = string.Compare(new_var1, new_var2);
+                    element[lens_code] = element[lens_code].Replace("Str.Compare{" + orig_var + "}", Convert.ToString(value));
+                    goto m_math_lib;
+                }
                 #endregion
 
                 #region func
@@ -649,6 +841,14 @@ namespace MyLanguage
                     new_data_for_double cls = new new_data_for_double();
                     cls.run(element, lens_code, list_double, list_int, element[lens_code].Split(' ')[0]);
                 }
+                //variable - string
+                else if (list_string.ContainsKey(element[lens_code].Split(' ')[0]))
+                {
+                    new_data_for_string cls = new new_data_for_string();
+                    cls.lens_code = lens_code;
+                    cls.run(element, list_string, element[lens_code].Split(' ')[0]);
+                    lens_code = cls.lens_code;
+                }
                 #endregion
 
 
@@ -662,11 +862,22 @@ namespace MyLanguage
             #endregion
         }
 
+        private void whiteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.BackColor = Color.FromArgb(30, 30, 30);
+            code.BackColor = Color.FromArgb(30, 30, 30);
+            code.ForeColor = Color.White;
+            otp.BackColor = Color.FromArgb(30, 30, 30);
+            otp.ForeColor = Color.White;
+        }
+
         private void blackToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.BackColor = Color.FromArgb(30, 30, 30);
             code.BackColor = Color.FromArgb(30, 30, 30);
+            code.ForeColor =  Color.White;
             otp.BackColor = Color.FromArgb(30, 30, 30);
+            otp.ForeColor = Color.White;
             // label1.BackColor = Color.FromArgb(53, 53, 53);
         }
 

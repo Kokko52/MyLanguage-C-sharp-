@@ -1,3 +1,14 @@
+for (kvint i = 0; i < 5; i++){
+
+}
+
+
+name = kvint i = 0.Split(' ')[1].Split(' ')[0]
+volume = 
+
+int ch = i
+
+
 func m1(kvint n1)
 {
 kvint a = 1
@@ -8,4 +19,15 @@ KV{
 kvint g = 1
 kvint g2 = 2
 kv.print (m1(g))
+}
+
+KV{
+kvint g = 0
+g = Math.Round{12,56}
+}
+
+KV{
+kvint g = 1
+g = Math.Floor{2,2}
+kv.print (g)
 }
