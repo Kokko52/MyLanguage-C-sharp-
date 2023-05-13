@@ -11,6 +11,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 namespace MyLanguage
 {
     public partial class MyLanguage : Form
@@ -59,6 +60,13 @@ namespace MyLanguage
         public MyLanguage()
         {
             InitializeComponent();
+            #region combobox1
+            for (int i = 10; i <= 24; ++i)
+            {
+                toolStripComboBox1.Items.Add(i);
+            }
+            toolStripComboBox1.Text = "14";
+            #endregion
 
             #region TextBoxs
             //TextBox1 - code
@@ -145,7 +153,7 @@ namespace MyLanguage
             //else if (element[lens_code] == "}" || element[lens_code] == "};" || element[lens_code][element[lens_code].Length - 1] == '}') { _sk--; }
             #endregion
 
-                #region math library
+            #region math library
             m_math_lib:
                 //Math.Round
                 if (element[lens_code].Contains("Math.Round"))
@@ -296,24 +304,41 @@ namespace MyLanguage
                     }                    //date
 
                     string new_var = mth.Split('{')[1];
-                    string[] variables = new_var.Split(';');
+                    string new_var1 = new_var.Split(';')[0];
+                    string new_var2 = new_var.Split(';')[1];
                     #region Date variables
-                    if (list_int.ContainsKey(new_var))
+                    //Variable 1
+                    if (list_int.ContainsKey(new_var1))
                     {
-                        new_var = Convert.ToString(list_int[new_var]);
+                        new_var1 = Convert.ToString(list_int[new_var1]);
                     }
-                    else if (list_double.ContainsKey(new_var))
+                    else if (list_double.ContainsKey(new_var1))
                     {
-                        new_var = Convert.ToString(list_double[new_var]);
+                        new_var1 = Convert.ToString(list_double[new_var1]);
                     }
-                    else if (list_string.ContainsKey(new_var))
+                    else if (list_string.ContainsKey(new_var1))
                     {
-                        new_var = list_string[new_var];
+                        new_var1 = list_string[new_var1];
+                    }
+                    else { }
+
+                    //Variable 2
+                    if (list_int.ContainsKey(new_var2))
+                    {
+                        new_var2 = Convert.ToString(list_int[new_var2]);
+                    }
+                    else if (list_double.ContainsKey(new_var2))
+                    {
+                        new_var2 = Convert.ToString(list_double[new_var2]);
+                    }
+                    else if (list_string.ContainsKey(new_var2))
+                    {
+                        new_var2 = list_string[new_var2];
                     }
                     else { }
                     #endregion
 
-                    double value = Math.Pow(Convert.ToDouble(variables[0]), Convert.ToDouble(variables[1]));
+                    double value = Math.Pow(Convert.ToDouble(new_var1), Convert.ToDouble(new_var2));
                     value = Math.Round(value, 2);
                     //error!!!!!!!!!!!!!!!!!!!!!!         
                     element[lens_code] = element[lens_code].Replace("Math.Pow{" + new_var + "}", Convert.ToString(value));
@@ -650,7 +675,7 @@ namespace MyLanguage
                     element[lens_code] = element[lens_code].Replace("Str.Compare{" + orig_var + "}", Convert.ToString(value));
                     goto m_math_lib;
                 }
-                #endregion
+                #endregion 
 
                 #region func
                 //name functions
@@ -862,7 +887,27 @@ namespace MyLanguage
             #endregion
         }
 
+        #region Colors
+        //White
         private void whiteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.BackColor = Color.FromArgb(240, 240, 240);
+            code.BackColor = Color.White;
+            code.ForeColor = Color.Black;
+            otp.BackColor = Color.White;
+            otp.ForeColor = Color.Black;
+        }
+        //Blue
+        private void blueToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.BackColor = Color.FromArgb(212, 226, 241);
+            code.BackColor = Color.White;
+            code.ForeColor = Color.Black;
+            otp.BackColor = Color.White;
+            otp.ForeColor = Color.Black;
+        }
+        //Black
+        private void blackToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.BackColor = Color.FromArgb(30, 30, 30);
             code.BackColor = Color.FromArgb(30, 30, 30);
@@ -870,17 +915,49 @@ namespace MyLanguage
             otp.BackColor = Color.FromArgb(30, 30, 30);
             otp.ForeColor = Color.White;
         }
+        #endregion
 
-        private void blackToolStripMenuItem_Click(object sender, EventArgs e)
+        //Save file
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.BackColor = Color.FromArgb(30, 30, 30);
-            code.BackColor = Color.FromArgb(30, 30, 30);
-            code.ForeColor =  Color.White;
-            otp.BackColor = Color.FromArgb(30, 30, 30);
-            otp.ForeColor = Color.White;
-            // label1.BackColor = Color.FromArgb(53, 53, 53);
+            Stream myStream;
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            saveFileDialog1.FilterIndex = 2;
+            saveFileDialog1.RestoreDirectory = true;
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                File.WriteAllText(saveFileDialog1.FileName, code.Text);
+            }
         }
 
+        //Open file
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            string str = "";
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                 str = dialog.FileName;
+            }
+            else
+            { return; }
+            StreamReader sr = new StreamReader(str);
+            string line = sr.ReadToEnd();
+            code.Text = line;
+            sr.Close();
+        }
+
+        //Font Size
+        private void toolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            code.Font = new Font("Times New Roman", Convert.ToInt32(toolStripComboBox1.Text));
+            otp.Font = new Font("Times New Roman", Convert.ToInt32(toolStripComboBox1.Text));
+        }
+
+        //Run and Clear
         private void runToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //clear
