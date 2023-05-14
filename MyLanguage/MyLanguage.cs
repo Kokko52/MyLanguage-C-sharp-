@@ -60,6 +60,7 @@ namespace MyLanguage
         public MyLanguage()
         {
             InitializeComponent();
+
             #region combobox1
             for (int i = 10; i <= 24; ++i)
             {
@@ -117,23 +118,49 @@ namespace MyLanguage
             //    return;
             //}
             #endregion
-            int lens_code = 0;
-            //func
-            while (element[lens_code] != "KV{")
+
+            int lens_code = 0;  
+            //backets
+            while (lens_code < element.Length)
             {
-                if (element[lens_code].Split(' ')[0] == "func")
-                {
-
-                    func_start = lens_code + 1;
-
-                    string name_func = element[lens_code].Split(' ')[1].Split('(')[0].Trim();
-                    string opt = element[lens_code].Split('(')[1].Split(')')[0];
-                    if (list_func.ContainsKey(name_func)) { otp.Text = $"Invalid syntax: a function {name_func} with this name already exists"; return; }
-                    list_func.Add(name_func, opt/* Convert.ToString(func_start)*/);
-                    list_func_str.Add(name_func, func_start);
-                }
-                lens_code++;
+                #region checking brackets
+                //skip null line
+                if (element[lens_code] == "") { }
+                //exists brackets '{'
+                else if (element[lens_code] == "{" || element[lens_code][element[lens_code].Length - 1] == '{') { _sk++; }
+                //exists brackets '}'
+                else if (element[lens_code] == "}" || element[lens_code] == "};" || element[lens_code][element[lens_code].Length - 1] == '}') { _sk--; }
+                #endregion
+                ++lens_code;
             }
+            #region Error: checking brackets
+            if (_sk > 1) { otp.Text = "Invalid syntax: missing closing brackets"; return; }
+            else if (_sk > 0) { otp.Text = "Invalid syntax: missing closing bracket"; return; }
+            else if (_sk == -1) { otp.Text = "Invalid syntax: missing opening bracket"; return; }
+            else if (_sk < 0) { otp.Text = "Invalid syntax: missing opening brackets"; return; }
+            #endregion
+
+            lens_code = 0;
+            //func
+            try
+            {
+                while (element[lens_code] != "KV{")
+                {
+                    if (element[lens_code].Split(' ')[0] == "func")
+                    {
+
+                        func_start = lens_code + 1;
+
+                        string name_func = element[lens_code].Split(' ')[1].Split('(')[0].Trim();
+                        string opt = element[lens_code].Split('(')[1].Split(')')[0];
+                        if (list_func.ContainsKey(name_func)) { otp.Text = $"Invalid syntax: a function {name_func} with this name already exists"; return; }
+                        list_func.Add(name_func, opt/* Convert.ToString(func_start)*/);
+                        list_func_str.Add(name_func, func_start);
+                    }
+                    lens_code++;
+                }
+            }
+            catch (Exception) { otp.Text = "Syntax invalid: not exists main func - \'KV{\'"; return; }
             while (element[lens_code] != "KV{")
             {
                 lens_code++;
@@ -144,15 +171,6 @@ namespace MyLanguage
             {
             m_return:
 
-            #region checking brackets
-            ////skip null line
-            //if (element[lens_code] == "") { }
-            ////exists brackets '{'
-            //else if (element[lens_code] == "{" || element[lens_code][element[lens_code].Length - 1] == '{') { _sk++; }
-            ////exists brackets '}'
-            //else if (element[lens_code] == "}" || element[lens_code] == "};" || element[lens_code][element[lens_code].Length - 1] == '}') { _sk--; }
-            #endregion
-
             #region math library
             m_math_lib:
                 //Math.Round
@@ -160,12 +178,21 @@ namespace MyLanguage
                 {
                     string str = element[lens_code];
                     int last = element[lens_code].LastIndexOf("Math.Round{");
-                    string mth = "";
-                    while (element[lens_code][last] != '}')
+                    if (last == -1)
                     {
-                        mth += element[lens_code][last];
-                        ++last;
+                        otp.Text = "Invalid syntax: Math.Round - \'{\' ?";
+                        break;
                     }
+                    string mth = "";
+                    try
+                    {
+                        while (element[lens_code][last] != '}')
+                        {
+                            mth += element[lens_code][last];
+                            ++last;
+                        }
+                    }
+                    catch (IndexOutOfRangeException) { otp.Text = "Invalid syntax: Math.Round - \'}\' ?"; break; }
                     //date
                     string new_var = mth.Split('{')[1];
 
@@ -184,8 +211,12 @@ namespace MyLanguage
                     }
                     else { }
                     #endregion
-
-                    double value = Math.Round(Convert.ToDouble(new_var));
+                    double value = 0.0;
+                    try
+                    {
+                        value = Math.Round(Convert.ToDouble(new_var));
+                    }
+                    catch (FormatException) { otp.Text = "Invalid syntax: Math.Round{" + new_var + "} - incorrect format"; break; }
                     element[lens_code] = element[lens_code].Replace("Math.Round{" + new_var + "}", Convert.ToString(value));
                     goto m_math_lib;
                 }
@@ -194,12 +225,21 @@ namespace MyLanguage
                 {
                     string str = element[lens_code];
                     int last = element[lens_code].LastIndexOf("Math.Floor{");
-                    string mth = "";
-                    while (element[lens_code][last] != '}')
+                    if (last == -1)
                     {
-                        mth += element[lens_code][last];
-                        ++last;
+                        otp.Text = "Invalid syntax: Math.Floor - \'{\' ?";
+                        break;
                     }
+                    string mth = "";
+                    try
+                    {
+                        while (element[lens_code][last] != '}')
+                        {
+                            mth += element[lens_code][last];
+                            ++last;
+                        }
+                    }
+                    catch (IndexOutOfRangeException) { otp.Text = "Invalid syntax: Math.Floor - \'}\' ?"; break; }
                     //date
                     string new_var = mth.Split('{')[1];
 
@@ -219,7 +259,12 @@ namespace MyLanguage
                     else { }
                     #endregion
 
-                    double value = Math.Floor(Convert.ToDouble(new_var));
+                    double value = 0.0;
+                    try
+                    {
+                        value = Math.Floor(Convert.ToDouble(new_var));
+                    }
+                    catch (FormatException) { otp.Text = "Invalid syntax: Math.Floor{" + new_var + "} - incorrect format"; break; }
                     element[lens_code] = element[lens_code].Replace("Math.Floor{" + new_var + "}", Convert.ToString(value));
                     goto m_math_lib;
                 }
@@ -228,12 +273,21 @@ namespace MyLanguage
                 {
                     string str = element[lens_code];
                     int last = element[lens_code].LastIndexOf("Math.Ceiling{");
-                    string mth = "";
-                    while (element[lens_code][last] != '}')
+                    if (last == -1)
                     {
-                        mth += element[lens_code][last];
-                        ++last;
+                        otp.Text = "Invalid syntax: Math.Ceiling - \'{\' ?";
+                        break;
                     }
+                    string mth = "";
+                    try
+                    {
+                        while (element[lens_code][last] != '}')
+                        {
+                            mth += element[lens_code][last];
+                            ++last;
+                        }
+                    }
+                    catch (IndexOutOfRangeException) { otp.Text = "Invalid syntax: Math.Ceilnig - \'}\' ?"; break; }
                     //date
                     string new_var = mth.Split('{')[1];
 
@@ -253,7 +307,12 @@ namespace MyLanguage
                     else { }
                     #endregion
 
-                    double value = Math.Ceiling(Convert.ToDouble(new_var));
+                    double value = 0.0;
+                    try
+                    {
+                        value = Math.Ceiling(Convert.ToDouble(new_var));
+                    }
+                    catch (FormatException) { otp.Text = "Invalid syntax: Math.Ceilnig{" + new_var + "} - incorrect format"; break; }
                     element[lens_code] = element[lens_code].Replace("Math.Ceiling{" + new_var + "}", Convert.ToString(value));
                     goto m_math_lib;
                 }
@@ -262,12 +321,21 @@ namespace MyLanguage
                 {
                     string str = element[lens_code];
                     int last = element[lens_code].LastIndexOf("Math.Sign{");
-                    string mth = "";
-                    while (element[lens_code][last] != '}')
+                    if (last == -1)
                     {
-                        mth += element[lens_code][last];
-                        ++last;
+                        otp.Text = "Invalid syntax: Math.Sign - \'{\' ?";
+                        break;
                     }
+                    string mth = "";
+                    try
+                    {
+                        while (element[lens_code][last] != '}')
+                        {
+                            mth += element[lens_code][last];
+                            ++last;
+                        }
+                    }
+                    catch (IndexOutOfRangeException) { otp.Text = "Invalid syntax: Math.Sign - \'}\' ?"; break; }
                     //date
                     string new_var = mth.Split('{')[1];
 
@@ -287,7 +355,12 @@ namespace MyLanguage
                     else { }
                     #endregion
 
-                    double value = Math.Sign(Convert.ToDouble(new_var));
+                    double value = 0.0;
+                    try
+                    {
+                        value = Math.Sign(Convert.ToDouble(new_var));
+                    }
+                    catch (FormatException) { otp.Text = "Invalid syntax: Math.Sign{" + new_var + "} - incorrect format"; break; }
                     element[lens_code] = element[lens_code].Replace("Math.Sign{" + new_var + "}", Convert.ToString(value));
                     goto m_math_lib;
                 }
@@ -296,16 +369,34 @@ namespace MyLanguage
                 {
                     string str = element[lens_code];
                     int last = element[lens_code].LastIndexOf("Math.Pow{");
-                    string mth = "";
-                    while (element[lens_code][last] != '}')
+                    if (last == -1)
                     {
-                        mth += element[lens_code][last];
-                        ++last;
-                    }                    //date
-
+                        otp.Text = "Invalid syntax: Math.Pow - \'{\' ?";
+                        break;
+                    }
+                    string mth = "";
+                    try
+                    {
+                        while (element[lens_code][last] != '}')
+                        {
+                            mth += element[lens_code][last];
+                            ++last;
+                        }                    //date
+                    }
+                    catch (IndexOutOfRangeException) { otp.Text = "Invalid syntax: Math.Pow - \'}\' ?"; break; }
                     string new_var = mth.Split('{')[1];
-                    string new_var1 = new_var.Split(';')[0];
-                    string new_var2 = new_var.Split(';')[1];
+                    string new_var1 = "";
+                    try
+                    {
+                        new_var1 = new_var.Split(';')[0];
+                    }
+                    catch (IndexOutOfRangeException) { otp.Text = "Invalid syntax: Math.Pow - 1 variable ?"; break; }
+                    string new_var2 = "";
+                    try
+                    {
+                        new_var2 = new_var.Split(';')[1];
+                    }
+                    catch (IndexOutOfRangeException) { otp.Text = "Invalid syntax: Math.Pow - 2 variable ?"; break; }
                     #region Date variables
                     //Variable 1
                     if (list_int.ContainsKey(new_var1))
@@ -338,9 +429,13 @@ namespace MyLanguage
                     else { }
                     #endregion
 
-                    double value = Math.Pow(Convert.ToDouble(new_var1), Convert.ToDouble(new_var2));
+                    double value = 0.0;
+                    try
+                    {
+                        value = Math.Pow(Convert.ToDouble(new_var1), Convert.ToDouble(new_var2));
+                    }
+                    catch (FormatException) { otp.Text = "Invalid syntax: Math.Pow{" + new_var + "} - incorrect format"; break; }
                     value = Math.Round(value, 2);
-                    //error!!!!!!!!!!!!!!!!!!!!!!         
                     element[lens_code] = element[lens_code].Replace("Math.Pow{" + new_var + "}", Convert.ToString(value));
                     goto m_math_lib;
                 }
@@ -349,12 +444,21 @@ namespace MyLanguage
                 {
                     string str = element[lens_code];
                     int last = element[lens_code].LastIndexOf("Math.Cos{");
-                    string mth = "";
-                    while (element[lens_code][last] != '}')
+                    if (last == -1)
                     {
-                        mth += element[lens_code][last];
-                        ++last;
+                        otp.Text = "Invalid syntax: Math.Cos - \'{\' ?";
+                        break;
                     }
+                    string mth = "";
+                    try
+                    {
+                        while (element[lens_code][last] != '}')
+                        {
+                            mth += element[lens_code][last];
+                            ++last;
+                        }
+                    }
+                    catch (IndexOutOfRangeException) { otp.Text = "Invalid syntax: Math.Cos - \'}\' ?"; break; }
                     //date
                     string new_var = mth.Split('{')[1];
 
@@ -374,7 +478,12 @@ namespace MyLanguage
                     else { }
                     #endregion
 
-                    double value = Math.Cos(Convert.ToDouble(new_var));
+                    double value = 0.0;
+                    try
+                    {
+                        value = Math.Cos(Convert.ToDouble(new_var));
+                    }
+                    catch (FormatException) { otp.Text = "Invalid syntax: Math.Cos{" + new_var + "} - incorrect format"; break; }
                     element[lens_code] = element[lens_code].Replace("Math.Cos{" + new_var + "}", Convert.ToString(value));
                     goto m_math_lib;
                 }
@@ -383,12 +492,21 @@ namespace MyLanguage
                 {
                     string str = element[lens_code];
                     int last = element[lens_code].LastIndexOf("Math.Sinh{");
-                    string mth = "";
-                    while (element[lens_code][last] != '}')
+                    if (last == -1)
                     {
-                        mth += element[lens_code][last];
-                        ++last;
+                        otp.Text = "Invalid syntax: Math.Sinh - \'{\' ?";
+                        break;
                     }
+                    string mth = "";
+                    try
+                    {
+                        while (element[lens_code][last] != '}')
+                        {
+                            mth += element[lens_code][last];
+                            ++last;
+                        }
+                    }
+                    catch (IndexOutOfRangeException) { otp.Text = "Invalid syntax: Math.Sinh - \'}\' ?"; break; }
                     //date
                     string new_var = mth.Split('{')[1];
 
@@ -408,7 +526,12 @@ namespace MyLanguage
                     else { }
                     #endregion
 
-                    double value = Math.Sinh(Convert.ToDouble(new_var));
+                    double value = 0.0;
+                    try
+                    {
+                        value = Math.Sinh(Convert.ToDouble(new_var));
+                    }
+                    catch (FormatException) { otp.Text = "Invalid syntax: Math.Sinh{" + new_var + "} - incorrect format"; break; }
                     element[lens_code] = element[lens_code].Replace("Math.Sinh{" + new_var + "}", Convert.ToString(value));
                     goto m_math_lib;
                 }
@@ -417,12 +540,21 @@ namespace MyLanguage
                 {
                     string str = element[lens_code];
                     int last = element[lens_code].LastIndexOf("Math.Sin{");
-                    string mth = "";
-                    while (element[lens_code][last] != '}')
+                    if (last == -1)
                     {
-                        mth += element[lens_code][last];
-                        ++last;
+                        otp.Text = "Invalid syntax: Math.Sin - \'{\' ?";
+                        break;
                     }
+                    string mth = "";
+                    try
+                    {
+                        while (element[lens_code][last] != '}')
+                        {
+                            mth += element[lens_code][last];
+                            ++last;
+                        }
+                    }
+                    catch (IndexOutOfRangeException) { otp.Text = "Invalid syntax: Math.Sin - \'}\' ?"; break; }
                     //date
                     string new_var = mth.Split('{')[1];
 
@@ -442,7 +574,12 @@ namespace MyLanguage
                     else { }
                     #endregion
 
-                    double value = Math.Sin(Convert.ToDouble(new_var));
+                    double value = 0.0;
+                    try
+                    {
+                        value = Math.Sin(Convert.ToDouble(new_var));
+                    }
+                    catch (FormatException) { otp.Text = "Invalid syntax: Math.Sin{" + new_var + "} - incorrect format"; break; }
                     element[lens_code] = element[lens_code].Replace("Math.Sin{" + new_var + "}", Convert.ToString(value));
                     goto m_math_lib;
                 }
@@ -451,12 +588,21 @@ namespace MyLanguage
                 {
                     string str = element[lens_code];
                     int last = element[lens_code].LastIndexOf("Math.Sqrt{");
-                    string mth = "";
-                    while (element[lens_code][last] != '}')
+                    if (last == -1)
                     {
-                        mth += element[lens_code][last];
-                        ++last;
+                        otp.Text = "Invalid syntax: Math.Sqrt - \'{\' ?";
+                        break;
                     }
+                    string mth = "";
+                    try
+                    {
+                        while (element[lens_code][last] != '}')
+                        {
+                            mth += element[lens_code][last];
+                            ++last;
+                        }
+                    }
+                    catch (IndexOutOfRangeException) { otp.Text = "Invalid syntax: Math.Sqrt - \'}\' ?"; break; }
                     //date
                     string new_var = mth.Split('{')[1];
 
@@ -476,24 +622,38 @@ namespace MyLanguage
                     else { }
                     #endregion
 
-                    double value = Math.Sqrt(Convert.ToDouble(new_var));
+                    double value = 0.0;
+                    try
+                    {
+                        value = Math.Sqrt(Convert.ToDouble(new_var));
+                    }
+                    catch (FormatException) { otp.Text = "Invalid syntax: Math.Sqrt{" + new_var + "} - incorrect format"; break; }
                     element[lens_code] = element[lens_code].Replace("Math.Sqrt{" + new_var + "}", Convert.ToString(value));
                     goto m_math_lib;
                 }
-                #endregion
-
+                #endregion 
+               
                 #region str library
                 //Str.Len
                 if (element[lens_code].Contains("Str.Len"))
                 {
                     string str = element[lens_code];
                     int last = element[lens_code].LastIndexOf("Str.Len{");
-                    string mth = "";
-                    while (element[lens_code][last] != '}')
+                    if (last == -1)
                     {
-                        mth += element[lens_code][last];
-                        ++last;
+                        otp.Text = "Invalid syntax: Str.Len - \'{\' ?";
+                        break;
                     }
+                    string mth = "";
+                    try
+                    {
+                        while (element[lens_code][last] != '}')
+                        {
+                            mth += element[lens_code][last];
+                            ++last;
+                        }
+                    }
+                    catch (IndexOutOfRangeException) { otp.Text = "Invalid syntax: Str.Len - \'}\' ?"; break; }
                     //date
                     string orig_var = mth.Split('{')[1];
                     string new_var = orig_var;
@@ -514,7 +674,8 @@ namespace MyLanguage
                     else { }
                     #endregion
 
-                    int value = new_var.Length;
+                    int value = 0;
+                    value = new_var.Length;
                     element[lens_code] = element[lens_code].Replace("Str.Len{" + orig_var + "}", Convert.ToString(value));
                     goto m_math_lib;
                 }
@@ -523,12 +684,21 @@ namespace MyLanguage
                 {
                     string str = element[lens_code];
                     int last = element[lens_code].LastIndexOf("Str.toLower{");
-                    string mth = "";
-                    while (element[lens_code][last] != '}')
+                    if (last == -1)
                     {
-                        mth += element[lens_code][last];
-                        ++last;
+                        otp.Text = "Invalid syntax: Str.toLower - \'{\' ?";
+                        break;
                     }
+                    string mth = "";
+                    try
+                    {
+                        while (element[lens_code][last] != '}')
+                        {
+                            mth += element[lens_code][last];
+                            ++last;
+                        }
+                    }
+                    catch (IndexOutOfRangeException) { otp.Text = "Invalid syntax: Str.toLower - \'}\' ?"; break; }
                     //date
                     string orig_var = mth.Split('{')[1];
                     string new_var = orig_var;
@@ -558,12 +728,21 @@ namespace MyLanguage
                 {
                     string str = element[lens_code];
                     int last = element[lens_code].LastIndexOf("Str.toUpper{");
-                    string mth = "";
-                    while (element[lens_code][last] != '}')
+                    if (last == -1)
                     {
-                        mth += element[lens_code][last];
-                        ++last;
+                        otp.Text = "Invalid syntax: Str.toUpper - \'{\' ?";
+                        break;
                     }
+                    string mth = "";
+                    try
+                    {
+                        while (element[lens_code][last] != '}')
+                        {
+                            mth += element[lens_code][last];
+                            ++last;
+                        }
+                    }
+                    catch (IndexOutOfRangeException) { otp.Text = "Invalid syntax: Str.toUpper - \'}\' ?"; break; }
                     //date
                     string orig_var = mth.Split('{')[1];
                     string new_var = orig_var;
@@ -593,12 +772,22 @@ namespace MyLanguage
                 {
                     string str = element[lens_code];
                     int last = element[lens_code].LastIndexOf("Str.Trim{");
-                    string mth = "";
-                    while (element[lens_code][last] != '}')
+                    if (last == -1)
                     {
-                        mth += element[lens_code][last];
-                        ++last;
+                        otp.Text = "Invalid syntax: Str.Trim - \'{\' ?";
+                        break;
                     }
+                    string mth = "";
+                    try
+                    {
+
+                        while (element[lens_code][last] != '}')
+                        {
+                            mth += element[lens_code][last];
+                            ++last;
+                        }
+                    }
+                    catch (IndexOutOfRangeException) { otp.Text = "Invalid syntax: Str.toTrim - \'}\' ?"; break; }
                     //date
                     string orig_var = mth.Split('{')[1];
                     string new_var = orig_var;
@@ -628,16 +817,30 @@ namespace MyLanguage
                 {
                     string str = element[lens_code];
                     int last = element[lens_code].LastIndexOf("Str.Compare{");
-                    string mth = "";
-                    while (element[lens_code][last] != '}')
+                    if (last == -1)
                     {
-                        mth += element[lens_code][last];
-                        ++last;
+                        otp.Text = "Invalid syntax: Str.Compare - \'{\' ?";
+                        break;
                     }
+                    string mth = "";
+                    try
+                    {
+                        while (element[lens_code][last] != '}')
+                        {
+                            mth += element[lens_code][last];
+                            ++last;
+                        }
+                    }
+                    catch (IndexOutOfRangeException) { otp.Text = "Invalid syntax: Str.Compare - \'}\' ?"; break; }
                     //date
                     string orig_var = mth.Split('{')[1];
                     string new_var1 = orig_var.Split(';')[0];
-                    string new_var2 = orig_var.Split(';')[1];
+                    string new_var2 = "";
+                    try
+                    {
+                        new_var2 = orig_var.Split(';')[1];
+                    }
+                    catch (IndexOutOfRangeException) { otp.Text = "Invalid syntax: Str.Compare - 2 variable ?"; break; }
 
                     #region Date variables
                     //Variable 1
@@ -671,7 +874,12 @@ namespace MyLanguage
                     else { }
                     #endregion
 
-                    int value = string.Compare(new_var1, new_var2);
+                    int value = 0;
+                    try
+                    {
+                        value = string.Compare(new_var1, new_var2);
+                    }
+                    catch (FormatException) { otp.Text = "Invalid syntax: Math.Compare{" + orig_var + "} - incorrect format"; break; }
                     element[lens_code] = element[lens_code].Replace("Str.Compare{" + orig_var + "}", Convert.ToString(value));
                     goto m_math_lib;
                 }
@@ -750,7 +958,7 @@ namespace MyLanguage
                     if (!kvprint.run(list_int, list_string, list_double, otp)) { break; }
                 }
                 #endregion
-
+               
                 #region Data types
                 //kvint
                 if (element[lens_code].Split(' ')[0] == "kvint")
@@ -798,6 +1006,7 @@ namespace MyLanguage
                     {
                         //error
                         otp.Text = "Invalid syntaxis: not exists \'ifik\'";
+                        break;
                     }
                     //if went to 'ifik' 
                     if (_if == 1)
@@ -813,7 +1022,7 @@ namespace MyLanguage
                     _if = 0;
                 }
                 #endregion
-
+                
                 #region cycle           
                 //while
                 if (element[lens_code].Split(' ')[0] == "while")
@@ -831,7 +1040,13 @@ namespace MyLanguage
                     @while _while = new @while();
                     _while.str = element[lens_code].Replace(" ", "");
                     if (_while.run(list_int, list_string, list_double, otp)) { check_wh = lens_code; }
-                    else { lens_code = end_wh + 1; goto m_return; }
+                    else
+                    {
+                        if (_while.err == -1) { break; }
+                        lens_code = end_wh + 1;
+                        goto m_return;
+                    }
+
                 }
                 //end while
                 if (element[lens_code].Trim() == "};")
@@ -856,7 +1071,7 @@ namespace MyLanguage
                 {
                     new_data_for_int cls = new new_data_for_int();
                     cls.lens_code = lens_code;
-                    cls.run(element, list_int, element[lens_code].Split(' ')[0]);
+                    cls.run(element, list_int, element[lens_code].Split(' ')[0], otp);
                     lens_code = cls.lens_code;
 
                 }
@@ -864,27 +1079,21 @@ namespace MyLanguage
                 else if (list_double.ContainsKey(element[lens_code].Split(' ')[0]))
                 {
                     new_data_for_double cls = new new_data_for_double();
-                    cls.run(element, lens_code, list_double, list_int, element[lens_code].Split(' ')[0]);
+                    cls.run(element, lens_code, list_double, list_int, element[lens_code].Split(' ')[0], otp);
                 }
                 //variable - string
                 else if (list_string.ContainsKey(element[lens_code].Split(' ')[0]))
                 {
                     new_data_for_string cls = new new_data_for_string();
                     cls.lens_code = lens_code;
-                    cls.run(element, list_string, element[lens_code].Split(' ')[0]);
+                    cls.run(element, list_string, element[lens_code].Split(' ')[0], otp);
                     lens_code = cls.lens_code;
                 }
                 #endregion
 
-
                 ++lens_code;
             }
-            #region Error: checking brackets
-            //if (_sk > 1) { otp.Text = "Invalid syntax: missing closing brackets"; }
-            //else if (_sk > 0) { otp.Text = "Invalid syntax: missing closing bracket"; }
-            //else if (_sk == -1) { otp.Text = "Invalid syntax: missing opening bracket"; }
-            //else if (_sk < 0) { otp.Text = "Invalid syntax: missing opening brackets"; }
-            #endregion
+            
         }
 
         #region Colors
@@ -940,7 +1149,7 @@ namespace MyLanguage
             string str = "";
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                 str = dialog.FileName;
+                str = dialog.FileName;
             }
             else
             { return; }

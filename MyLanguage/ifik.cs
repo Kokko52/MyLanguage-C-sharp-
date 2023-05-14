@@ -29,7 +29,11 @@ namespace MyLanguage
         public bool run(Dictionary<string, int> list_int, Dictionary<string, string> list_string, Dictionary<string, double> list_double, TextBox otp, string[] element)
         {
             // ifik(...)
-            elements = str.Split('(')[1].Split(')')[0];
+            try
+            {
+                elements = str.Split('(')[1].Split(')')[0];
+            }
+            catch (IndexOutOfRangeException) { otp.Text = $"Invalid syntax: {str}   -   no exists bracket";return false; }
             //split elements (...)
             for (int i = 0; i < symbol.Length; i++)
             {

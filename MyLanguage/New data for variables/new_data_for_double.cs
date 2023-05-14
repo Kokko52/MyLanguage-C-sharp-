@@ -4,30 +4,42 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using static System.Net.WebRequestMethods;
 
 namespace MyLanguage
 {
     internal class new_data_for_double
     {
-        public bool run(string[] element, int lens_code, Dictionary<string, double> list_double, Dictionary<string, int> list_int, string variable)
+        public bool run(string[] element, int lens_code, Dictionary<string, double> list_double, Dictionary<string, int> list_int, string variable, TextBox otp)
         {
             string[] symbols = new string[] { "+", "-", "*", "/" };
 
-            //orig string
-            string line = element[lens_code].Split('=')[1].Replace(" ", "");
+            string line = "";
+
+            //orig string 
+            try
+            {
+                line = element[lens_code].Split('=')[1].Replace(" ", "");
+            }
+            catch (IndexOutOfRangeException) { otp.Text = $"Syntax invalid: {element[lens_code]}    -   \'=\' ?"; return false; }
             //split string
             string[] line_split = new string[line.Length + 1];
             //check
             int cnt = 0;
             for (int i = 0; i < line.Length + 1; ++i)
             {
-                //add elements
-                while (line[cnt] != '+' && line[cnt] != '-' && line[cnt] != '*' && line[cnt] != '/' && cnt < line.Length)
+                try
                 {
-                    line_split[i] += line[cnt];
-                    ++cnt;
-                    if (cnt == line.Length) { break; }
+                    //add elements
+                    while (line[cnt] != '+' && line[cnt] != '-' && line[cnt] != '*' && line[cnt] != '/' && cnt < line.Length)
+                    {
+                        line_split[i] += line[cnt];
+                        ++cnt;
+                        if (cnt == line.Length) { break; }
+                    }
                 }
+                catch (Exception) { otp.Text = $"Invalid syntax: {element[lens_code]}   -   format exeption"; return false; }
                 ++i;
                 //exit
                 if (cnt == line.Length) { break; }
@@ -107,8 +119,11 @@ namespace MyLanguage
                 ++cnt;
             }
             //new value
+            try
+            {
             list_double[variable] = Convert.ToDouble(line_split[0]);
-
+            }
+            catch (FormatException) { otp.Text = "Syntax invalid: format exeption"; return false; }
             return true;
         }
     }

@@ -5,31 +5,41 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace MyLanguage
 {
     class new_data_for_string
     {
         public int lens_code;
-        public bool run(string[] element, Dictionary<string, string> list_string, string variable)
+        public bool run(string[] element, Dictionary<string, string> list_string, string variable, TextBox otp)
         {
             string[] symbols = new string[] { "+", "-", "*", "/" };
+            string line = "";
 
-            //orig string
-            string line = element[lens_code].Split('=')[1].Replace(" ", "");
+            //orig string 
+            try
+            {
+                line = element[lens_code].Split('=')[1].Replace(" ", "");
+            }
+            catch (IndexOutOfRangeException) { otp.Text = $"Syntax invalid: {element[lens_code]}    -   \'=\' ?";return false; }
             //split string
             string[] line_split = new string[line.Length + 1];
             //check
             int cnt = 0;
             for (int i = 0; i < line.Length + 1; ++i)
             {
-                //add elements
-                while (line[cnt] != '+' && line[cnt] != '-' && line[cnt] != '*' && line[cnt] != '/' && cnt < line.Length)
+                try
                 {
-                    line_split[i] += line[cnt];
-                    ++cnt;
-                    if (cnt == line.Length) { break; }
+                    //add elements
+                    while (line[cnt] != '+' && line[cnt] != '-' && line[cnt] != '*' && line[cnt] != '/' && cnt < line.Length)
+                    {
+                        line_split[i] += line[cnt];
+                        ++cnt;
+                        if (cnt == line.Length) { break; }
+                    }
                 }
+                catch (Exception) { otp.Text = $"Invalid syntax: {element[lens_code]}   -   format exeption"; return false; }
                 ++i;
                 //exit
                 if (cnt == line.Length) { break; }
@@ -105,8 +115,11 @@ namespace MyLanguage
                 ++cnt;
             }
             //new value
+            try
+            {
             list_string[variable] = new string(line_split[0].Reverse().ToArray());
-
+            }
+            catch (FormatException) { otp.Text = "Syntax invalid: format exeption"; return false; }
             return true;
         }
     }

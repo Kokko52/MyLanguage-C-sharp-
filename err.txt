@@ -1,0 +1,9 @@
+KV{
+kvint g = Math.Floor{2,213; sdfsdf}
+kv.print (g)
+}
+
+KV{
+kvint g = Math.Pow{2,213}
+kv.print (g)
+}

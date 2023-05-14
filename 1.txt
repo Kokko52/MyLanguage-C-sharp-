@@ -31,3 +31,14 @@ kvint g = 1
 g = Math.Floor{2,2}
 kv.print (g)
 }
+
+
+
+KV{
+kvstring g = sad
+kvint h = 0
+h = Str.Len{1234} + 12
+kv.print (h)
+}
+
+
