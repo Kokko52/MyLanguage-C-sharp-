@@ -62,7 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="func.cs" />
-    <Compile Include="new_data_for_string.cs" />
+    <Compile Include="New data for variables\new_data_for_string.cs" />
     <Compile Include="Сycles\for.cs" />
     <Compile Include="ifik.cs" />
     <Compile Include="Data types\kvdouble.cs" />

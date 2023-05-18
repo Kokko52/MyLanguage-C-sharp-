@@ -1,0 +1,11 @@
+KV{
+kvint n1 = 5
+ifik (n1 > 1)
+{
+kv.print ("true")
+}
+elsik
+{
+kv.print ("false")
+}
+}

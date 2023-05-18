@@ -17,6 +17,7 @@ namespace MyLanguage
         public string func_value;
         public int lens_code;
         public string result;
+        public int ch_mn;
         public bool run(Dictionary<string, int> list_int, Dictionary<string, string> list_string, Dictionary<string, double> list_double, Dictionary<string, string> list_func, TextBox otp, string[] element)
         {
             string val1 = "";
@@ -28,13 +29,18 @@ namespace MyLanguage
             for (int i = 0; i < func_date.Length; ++i) { func_date[i] = func_date[i].Trim(); }
             if (list_func_value.Length != func_date.Length)
             {
-                otp.Text = "...";
+                otp.Text = "Syntax invalid: different number of arguments";
                 return false;
             }
 
             //values
             val1 = func_value.Split(';')[0];
-            string nm_vr1 = list_func_value[0].Split(' ')[1];
+            string nm_vr1 = "";
+            try
+            {
+                nm_vr1 = list_func_value[0].Split(' ')[1];
+            }
+            catch (IndexOutOfRangeException) { otp.Text = "Syntax invalid: not name variable in function "; return false; }
             string nm_vr2 = "";
             try
             {
@@ -47,13 +53,28 @@ namespace MyLanguage
             #region if variable exists
             if (list_int.ContainsKey(nm_vr1) || list_string.ContainsKey(nm_vr1) || list_double.ContainsKey(nm_vr1))
             {
-                otp.Text = $"Variable \'{nm_vr1}\' already exists";
-                return false;
+                if (lens_code < ch_mn)
+                {
+                    list_int.Remove(nm_vr1);
+
+                }
+                else
+                {
+                    otp.Text = $"Variable \'{nm_vr1}\' already exists";
+                    return false;
+                }
             }
             if (list_int.ContainsKey(nm_vr2) || list_string.ContainsKey(nm_vr2) || list_double.ContainsKey(nm_vr2))
             {
-                otp.Text = $"Variable \'{nm_vr2}\' already exists";
-                return false;
+                if (lens_code < ch_mn)
+                {
+                    list_int.Remove(nm_vr2);
+                }
+                else
+                {
+                    otp.Text = $"Variable \'{nm_vr2}\' already exists";
+                    return false;
+                }
             }
             #endregion
 
@@ -104,7 +125,7 @@ namespace MyLanguage
             {
                 list_string.Add(nm_vr1, val1);
             }
-            else { otp.Text = "Invalid syntax: ..."; }
+            else { otp.Text = $"Invalid syntax: {func_name}    -   format exeption"; }
             #endregion
 
             if (list_func_value.Length == 1 && func_date.Length == 1)
@@ -124,7 +145,7 @@ namespace MyLanguage
                 {
                     list_string.Add(nm_vr2, val2);
                 }
-                else { otp.Text = "Invalid syntax: ..."; }
+                else { otp.Text = $"Invalid syntax: {func_name}    -   format exeption"; }
                 #endregion
             }
             while(!element[lens_code].Contains("ret"))

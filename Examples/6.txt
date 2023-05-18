@@ -1,0 +1,15 @@
+KV{
+kvint n1 = 0
+n1 = Math.Round[3,6] + Math.Floor[2,9] + Math.Ceiling[3,9]
+kv.print (n1)
+
+n1 = Math.Pow[4;2] + Math.Sqrt[16]
+kv.print (n1)
+
+kvdouble n2 = 0
+n2 = Math.Sin[1] + Math.Cos[1]
+kv.print (n2)
+
+n2 = Math.Sign[1,23]
+kv.print (n2)
+}

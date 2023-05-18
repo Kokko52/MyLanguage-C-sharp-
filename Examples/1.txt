@@ -1,0 +1,8 @@
+KV{
+kvint n1 = 123
+kvdouble n2 = 2,2
+kvstring n3 = qwe
+kv.print (n1)
+kv.print (n2)
+kv.print (n3)
+}

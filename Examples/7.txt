@@ -1,0 +1,16 @@
+KV{
+kvstring str = 123456
+str = Str.Len[str]
+kv.print (str)
+
+str = Str.toLower[LOweR]
+kv.print (str)
+
+str = Str.toUpper[Upper]
+kv.print (str)
+
+str = Str.Trim[  trim  ]
+kv.print (str)
+
+kv.print (Str.Compare[abc;qwe])
+}

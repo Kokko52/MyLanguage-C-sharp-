@@ -20,7 +20,7 @@ namespace MyLanguage
             //orig string 
             try
             {
-                line = element[lens_code].Split('=')[1].Replace(" ", "");
+                line = element[lens_code].Split('=')[1];//.Replace(" ", "");
             }
             catch (IndexOutOfRangeException) { otp.Text = $"Syntax invalid: {element[lens_code]}    -   \'=\' ?";return false; }
             //split string
@@ -55,9 +55,9 @@ namespace MyLanguage
             //find variables
             while (cnt < line_split.Length && line_split[cnt] != null)
             {
-                if (list_string.ContainsKey(line_split[cnt]))
+                if (list_string.ContainsKey(line_split[cnt].Trim()))
                 {
-                    line_split[cnt] = Convert.ToString(list_string[line_split[cnt]]);
+                    line_split[cnt] = Convert.ToString(list_string[line_split[cnt].Trim()]);
                 }
                 ++cnt;
             }
@@ -68,20 +68,16 @@ namespace MyLanguage
             {
                 if (line_split[cnt] == "*")
                 {
-                    //ArrayList line_split_list = new ArrayList(line_split);
-                    //line_split_list[cnt + 1] = Convert.ToString(Convert.ToInt32(line_split[cnt + 1]) * Convert.ToInt32(line_split[cnt - 1]));
-                    //line_split_list.RemoveAt(cnt);
-                    //line_split_list.RemoveAt(cnt - 1);
-                    //line_split = (string[])line_split_list.ToArray(typeof(string));
+                    otp.Text = $"Invalid syntax: \'{element[lens_code]}\'   -  invalid symbol ";
+                    cnt = 0;
+                    return false;
                     cnt = 0;
                 }
                 else if (line_split[cnt] == "/")
                 {
-                    //ArrayList line_split_list = new ArrayList(line_split);
-                    //line_split_list[cnt + 1] = Convert.ToString(Convert.ToInt32(line_split[cnt - 1]) / Convert.ToInt32(line_split[cnt + 1]));
-                    //line_split_list.RemoveAt(cnt);
-                    //line_split_list.RemoveAt(cnt - 1);
-                    //line_split = (string[])line_split_list.ToArray(typeof(string));
+                    otp.Text = $"Invalid syntax: \'{element[lens_code]}\'   -  invalid symbol ";
+                    cnt = 0;
+                    return false;
                     cnt = 0;
                 }
                 ++cnt;
@@ -104,13 +100,9 @@ namespace MyLanguage
                 }
                 else if (line_split[cnt] == "-")
                 {
-                    
-                    //ArrayList line_split_list = new ArrayList(line_split);
-                    //line_split_list[cnt + 1] = Convert.ToString(Convert.ToInt32(line_split[cnt - 1]) - Convert.ToInt32(line_split[cnt + 1]));
-                    //line_split_list.RemoveAt(cnt);
-                    //line_split_list.RemoveAt(cnt - 1);
-                    //line_split = (string[])line_split_list.ToArray(typeof(string));
+                    otp.Text = $"Invalid syntax: \'{element[lens_code]}\'   -  invalid symbol ";
                     cnt = 0;
+                    return false;
                 }
                 ++cnt;
             }

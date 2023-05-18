@@ -1,0 +1,18 @@
+func f1 (kvint v1;kvint v2)
+{
+    kvint v3 = 0
+    v3 =  v1 +v2
+    ret v3
+}
+func f2 (kvdouble z1;kvint z2)
+{
+    kvdouble z3 = 0
+    z3 =  z1 *z2
+    ret z3
+}
+KV{
+    kvdouble p1 = 1,1
+    kvint p2 = 2
+    kv.print (f1(1;p2))
+    kv.print (f2(p1; 100))
+}

@@ -17,7 +17,8 @@ namespace MyLanguage
         public string name;
         //volume string kvint
         public int volume;
-
+        public int ch_mn;
+        public int lens_code;
         public bool run(Dictionary<string, int> list_int, Dictionary<string, string> list_string, Dictionary<string, double> list_double, TextBox otp)
         {
             try
@@ -38,8 +39,15 @@ namespace MyLanguage
             //if variable exists
             if (list_int.ContainsKey(name) || list_string.ContainsKey(name) || list_double.ContainsKey(name))
             {
-                otp.Text = $"Variable \'{name}\' with the volume \'{volume}\' already exists";
-                return false;
+                if (lens_code < ch_mn)
+                {
+                    list_int[name] = volume;
+                }
+                else
+                {
+                    otp.Text = $"Variable \'{name}\' with the volume \'{volume}\' already exists";
+                    return false;
+                }
             }
             //else add variable
             else

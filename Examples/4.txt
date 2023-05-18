@@ -1,0 +1,12 @@
+KV{
+
+kvint n1 = 0
+kvdouble n2 = 0
+
+n1 = 100 + 10 * 10 - 10 /10 
+n2 = 2,2 + 10 * 2 - 100 / 100
+
+kv.print (n1)
+kv.print (n2)
+
+}
